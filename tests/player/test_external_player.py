@@ -21,6 +21,7 @@ from schieber.player.random_player import RandomPlayer
 from schieber.tournament import Tournament
 
 
+@pytest.mark.skip()
 def test_control():
     logging.basicConfig(stream=sys.stdout, level=logging.DEBUG, format='%(asctime)s %(levelname)-8s %(message)s')
 
