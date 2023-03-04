@@ -20,13 +20,13 @@ Round 1 starts.
 --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 Hand cards: 
 
-0 : <BELL:Koenig>
-1 : <ACORN:9>
+0 : <SCHELLE:Koenig>
+1 : <EICHEL:9>
 2 : <ROSE:9>
-3 : <ACORN:Ober>
+3 : <EICHEL:Ober>
 4 : <ROSE:Banner>
-5 : <SHIELD:8>
-6 : <ACORN:Ass>
+5 : <SCHILTE:8>
+6 : <EICHEL:Ass>
 7 : <ROSE:Ass>
 8 : <ROSE:Under>
 
@@ -35,9 +35,9 @@ Trumpf:
 0 : Trumpf.OBE_ABE
 1 : Trumpf.UNDE_UFE
 2 : Trumpf.ROSE
-3 : Trumpf.BELL
-4 : Trumpf.ACORN
-5 : Trumpf.SHIELD
+3 : Trumpf.SCHELLE
+4 : Trumpf.EICHEL
+5 : Trumpf.SCHILTE
 6 : Trumpf.SCHIEBEN
 
 Geschoben: False

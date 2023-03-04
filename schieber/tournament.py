@@ -54,7 +54,7 @@ class Tournament:
         """
         Plays a tournament until one team reaches the point_limit.
         :param rounds:
-        :param use_counting_factor: if True: Undenufe and Obenabe are counted 3-fold and Shield and Bell are counted 2-fold
+        :param use_counting_factor: if True: Undenufe and Obenabe are counted 3-fold and Schilte and Schelle are counted 2-fold
         :return:
         """
         self.build_teams()

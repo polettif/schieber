@@ -9,7 +9,7 @@ def get_trumpf(trumpf):
         'OBE_ABE': Trumpf.OBE_ABE,
         'UNDE_UFE': Trumpf.UNDE_UFE,
         'ROSE': Trumpf.ROSE,
-        'BELL': Trumpf.BELL,
-        'ACORN': Trumpf.ACORN,
-        'SHIELD': Trumpf.SHIELD,
+        'SCHELLE': Trumpf.SCHELLE,
+        'EICHEL': Trumpf.EICHEL,
+        'SCHILTE': Trumpf.SCHILTE,
     }[trumpf]

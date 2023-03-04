@@ -212,7 +212,7 @@ def get_mode(trumpf):
         'OBE_ABE': TopDownMode(),
         'UNDE_UFE': BottomUpMode(),
         'ROSE': TrumpfColorMode(Suit['ROSE']),
-        'BELL': TrumpfColorMode(Suit['BELL']),
-        'ACORN': TrumpfColorMode(Suit['ACORN']),
-        'SHIELD': TrumpfColorMode(Suit['SHIELD']),
+        'SCHELLE': TrumpfColorMode(Suit['SCHELLE']),
+        'EICHEL': TrumpfColorMode(Suit['EICHEL']),
+        'SCHILTE': TrumpfColorMode(Suit['SCHILTE']),
     }[trumpf]

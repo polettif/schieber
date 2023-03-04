@@ -1,8 +1,8 @@
 from schieber.suit import Suit
 from schieber.player.server_player.helpers.server_cards import Color
 
-suit_to_color_dict = {Suit.ROSE: Color.HEARTS, Suit.ACORN: Color.DIAMONDS, Suit.BELL: Color.CLUBS,
-                      Suit.SHIELD: Color.SPADES}
+suit_to_color_dict = {Suit.ROSE: Color.HEARTS, Suit.EICHEL: Color.DIAMONDS, Suit.SCHELLE: Color.CLUBS,
+                      Suit.SCHILTE: Color.SPADES}
 color_to_suit_dict = dict((v, k) for k, v in suit_to_color_dict.items())
 
 

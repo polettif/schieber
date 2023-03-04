@@ -1,6 +1,6 @@
 from schieber.trumpf import Trumpf
 
-counting_factor = {Trumpf.ROSE: 1, Trumpf.ACORN: 1, Trumpf.BELL: 2,  Trumpf.SHIELD: 2, Trumpf.OBE_ABE: 3,
+counting_factor = {Trumpf.ROSE: 1, Trumpf.EICHEL: 1, Trumpf.SCHELLE: 2, Trumpf.SCHILTE: 2, Trumpf.OBE_ABE: 3,
                    Trumpf.UNDE_UFE: 3}
 
 points_obe_abe = {6: 0, 7: 0, 8: 8, 9: 0, 10: 10, 11: 2, 12: 3, 13: 4, 14: 11}
