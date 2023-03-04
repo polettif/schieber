@@ -4,7 +4,7 @@ from multiprocessing import Condition
 from schieber.dealer import Dealer
 from schieber.rules.stich_rules import stich_rules, card_allowed
 from schieber.rules.trumpf_rules import trumpf_allowed
-from schieber.rules.count_rules import count_stich, counting_factor
+from schieber.rules.count_rules import count_stich
 from schieber.stich import PlayedCard, stich_dict, played_card_dict
 from schieber.trumpf import Trumpf
 
@@ -12,7 +12,12 @@ logger = logging.getLogger(__name__)
 
 
 class Game:
-    def __init__(self, teams=None, point_limit=1500, use_counting_factor=False, seed=None):
+    def __init__(self, teams=None, point_limit=1500,
+                 counting_factors=None,
+                 seed=None):
+        if counting_factors is None:
+            counting_factors = {Trumpf.ROSE: 1, Trumpf.EICHEL: 1, Trumpf.SCHELLE: 2, Trumpf.SCHILTE: 2,
+                                Trumpf.OBE_ABE: 3, Trumpf.UNDE_UFE: 3}
         self.teams = teams
         self.point_limit = point_limit
         self.players = [teams[0].players[0], teams[1].players[0], teams[0].players[1], teams[1].players[1]]
@@ -21,7 +26,7 @@ class Game:
         self.trumpf = None
         self.stiche = []
         self.cards_on_table = []
-        self.use_counting_factor = use_counting_factor
+        self.counting_factors = counting_factors
         self.seed = seed
         self.endless_play_control = Condition()  # used to control the termination of the play_endless method
         self.stop_playing = False  # has to be set to true in order to stop the endless play
@@ -186,7 +191,7 @@ class Game:
         :return:
         """
         points = count_stich(cards, self.trumpf, last=last)
-        points = points * counting_factor[self.trumpf] if self.use_counting_factor else points
+        points = points * self.counting_factors[self.trumpf]
         self.teams[team_index].points += points
 
     def get_state(self):
@@ -206,7 +211,8 @@ class Game:
             geschoben=self.geschoben,
             point_limit=self.point_limit,
             table=[played_card_dict(played_card) for played_card in self.cards_on_table],
-            teams=[dict(points=team.points) for team in self.teams]
+            teams=[dict(points=team.points) for team in self.teams],
+            counting_factors=self.counting_factors
         )
 
     def reset_points(self):
@@ -218,13 +224,14 @@ class Game:
 
 
 class GameState:
-    def __init__(self, stiche, trumpf: Trumpf, geschoben: bool, point_limit: int, table, teams):
+    def __init__(self, stiche, trumpf: Trumpf, geschoben: bool, point_limit: int, table, teams, counting_factors):
         self.stiche = stiche
         self.trumpf: Trumpf = trumpf
         self.geschoben: bool = geschoben
         self.point_limit: int = point_limit
         self.table = table
         self.teams = teams
+        self.counting_factors = counting_factors
 
 
 def get_player_index(start_index):

@@ -3,7 +3,6 @@ from operator import itemgetter
 
 from schieber.helpers.game_helper import *
 from schieber.trumpf import Trumpf
-from schieber.rules.count_rules import counting_factor
 
 # https://www.jassverzeichnis.ch/index.php/blog/95-jass-tipps-trumpfansagen-schieber
 TrumpfType = Enum('TrumpfType',
@@ -31,11 +30,13 @@ def choose_trumpf(cards, geschoben):
 
 
 def choose_candidate(candidates):
+    dummy_factors = {Trumpf.ROSE: 1, Trumpf.EICHEL: 1, Trumpf.SCHELLE: 2, Trumpf.SCHILTE: 2,
+                     Trumpf.OBE_ABE: 3, Trumpf.UNDE_UFE: 3}
     max_index = 0
     max_factor = 0
     for i in range(0, len(candidates)):
         trumpf, _ = candidates[i]
-        current_factor = counting_factor[trumpf]
+        current_factor = dummy_factors[trumpf]
         if max_factor < current_factor:
             max_factor = current_factor
             max_index = i

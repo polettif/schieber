@@ -1,5 +1,4 @@
 import pytest
-from schieber.rules.count_rules import counting_factor
 
 from schieber.deck import Deck
 
@@ -73,10 +72,11 @@ def test_add_points(trumpf):
     team_1 = Team(players=[random_players[0], random_players[1]])
     team_2 = Team(players=[random_players[1], random_players[2]])
     teams = [team_1, team_2]
-    game = Game(teams=teams, use_counting_factor=True)
+    game = Game(teams=teams)
     game.trumpf = trumpf
     game.add_points(team_index=0, cards=deck.cards, last=False)
-    assert team_1.points == round_points * counting_factor[trumpf]
-    game.use_counting_factor = False
+    assert team_1.points == round_points * game.counting_factors[trumpf]
+    game.counting_factors = {Trumpf.ROSE: 1, Trumpf.EICHEL: 1, Trumpf.SCHELLE: 1, Trumpf.SCHILTE: 1,
+                             Trumpf.OBE_ABE: 1, Trumpf.UNDE_UFE: 1}
     game.add_points(team_index=1, cards=deck.cards, last=False)
     assert team_2.points == round_points
