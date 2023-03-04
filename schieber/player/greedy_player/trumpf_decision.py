@@ -5,21 +5,25 @@ from schieber.helpers.game_helper import *
 from schieber.trumpf import Trumpf
 
 # https://www.jassverzeichnis.ch/index.php/blog/95-jass-tipps-trumpfansagen-schieber
-TrumpfType = Enum('TrumpfType',
-                  ['UNDER_4', 'NELL_ASS_5', 'UNDER_NELL_ASS', 'UNDER_NELL_3_2_ASS', 'STICHE_5', 'NO_TRUMPF',
-                   'HAVE_TO_DECIDE'])
-
+class TrumpfType(Enum):
+    UNDER_4 = 'UNDER_4'
+    NELL_ASS_5 = 'NELL_ASS_5'
+    UNDER_NELL_ASS = 'UNDER_NELL_ASS'
+    UNDER_NELL_3_2_ASS = 'UNDER_NELL_3_2_ASS'
+    STICHE_5 = 'STICHE_5'
+    NO_TRUMPF = 'NO_TRUMPF'
+    HAVE_TO_DECIDE = 'HAVE_TO_DECIDE'
 
 def choose_trumpf(cards, geschoben):
     candidates = []
     for trumpf in filter(lambda x: x != Trumpf.OBE_ABE and x != Trumpf.UNDE_UFE and x != Trumpf.SCHIEBEN, Trumpf):
-        trumpf_type = evalute_stich_trumpf(cards, trumpf.name)
+        trumpf_type = evaluate_stich_trumpf(cards, trumpf.name)
         if not trumpf_type == TrumpfType.NO_TRUMPF:
             candidates.append((trumpf, trumpf_type))
-    trumpf_type = evalute_unde_ufe(cards)
+    trumpf_type = evaluate_unde_ufe(cards)
     if not trumpf_type == TrumpfType.NO_TRUMPF:
         candidates.append((Trumpf.UNDE_UFE, trumpf_type))
-    trumpf_type = evalute_obe_abe(cards)
+    trumpf_type = evaluate_obe_abe(cards)
     if not trumpf_type == TrumpfType.NO_TRUMPF:
         candidates.append((Trumpf.OBE_ABE, trumpf_type))
     if len(candidates) >= 1:
@@ -51,7 +55,7 @@ def have_to_decide(cards):
     return trumpf, TrumpfType.HAVE_TO_DECIDE
 
 
-def evalute_stich_trumpf(cards, suit_name):
+def evaluate_stich_trumpf(cards, suit_name):
     trumpf_card_values = [card.value for card in cards if card.suit.name == suit_name]
     non_trumpf_card_values = [card.value for card in cards if card.suit.name != suit_name]
     nell = bool(9 in trumpf_card_values)
@@ -68,12 +72,12 @@ def evalute_stich_trumpf(cards, suit_name):
     return TrumpfType.NO_TRUMPF
 
 
-def evalute_unde_ufe(cards):
+def evaluate_unde_ufe(cards):
     stiche = count_stiche(cards=cards, best_card=6, step=1)
     return TrumpfType.STICHE_5 if len(stiche) > 5 else TrumpfType.NO_TRUMPF
 
 
-def evalute_obe_abe(cards):
+def evaluate_obe_abe(cards):
     stiche = count_stiche(cards=cards, best_card=14, step=-1)
     return TrumpfType.STICHE_5 if len(stiche) > 5 else TrumpfType.NO_TRUMPF
 

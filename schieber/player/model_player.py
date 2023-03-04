@@ -6,10 +6,6 @@ from schieber.player.greedy_player.greedy_player import GreedyPlayer
 from stable_baselines import PPO2
 from stable_baselines.common.vec_env import DummyVecEnv
 
-from schieber.player.challenge_player.challenge_player import ChallengePlayer
-
-from schieber.player.base_player import BasePlayer
-
 from schieber.player.external_player import ExternalPlayer
 
 logger = logging.getLogger(__name__)
