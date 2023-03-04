@@ -7,18 +7,16 @@ from schieber.rules.stich_rules import allowed_cards
 
 
 class BasePlayer:
-    def __init__(self, name='unknown', seed=None, trumps='all'):
+    def __init__(self, name='unknown', seed=None):
         """
         :param name:
         :param seed:
-        :param trumps: if 'all': no restriction on trumps available, if 'obe_abe': only OBE_ABE allowed
         """
         self.name = name
         self.cards = []
         self.trumpf_list = list(Trumpf)
         self.id = name
         self.seed = seed
-        self.trumps = trumps
 
     def get_dict(self):
         """
@@ -35,7 +33,7 @@ class BasePlayer:
     def choose_trumpf(self, state: GameState):
         raise NotImplementedError(str(inspect.stack()[1][3]))
 
-    def choose_card(self, state: GameState = None):
+    def choose_card(self, state: GameState):
         raise NotImplementedError(str(inspect.stack()[1][3]))
 
     def move_made(self, player_id, card, state):

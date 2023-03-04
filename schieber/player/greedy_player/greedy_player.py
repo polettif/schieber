@@ -4,6 +4,7 @@ from schieber.trumpf import Trumpf
 
 
 class GreedyPlayer(BasePlayer):
+    # TODO Does not fit base_player contract choose_trumpf(state: GameState)
     def choose_trumpf(self, geschoben):
         allowed = False
         while not allowed:
@@ -15,6 +16,7 @@ class GreedyPlayer(BasePlayer):
             if allowed:
                 yield None
 
+    # TODO Does not fit base_player contract choose_card(state: GameState)
     def choose_card(self, state=None):
         allowed_cards = self.allowed_cards(state=state)
         allowed = False

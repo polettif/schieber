@@ -16,10 +16,7 @@ def select_random_trumpf(geschoben: bool):
 
 class RandomPlayer(BasePlayer):
     def choose_trumpf(self, state: GameState):
-        if self.trumps == 'all':
-            return select_random_trumpf(state.geschoben)
-        elif self.trumps == 'obe_abe':
-            return Trumpf.OBE_ABE
+        return select_random_trumpf(state.geschoben)
 
     def choose_card(self, state=None):
         cards = self.allowed_cards(state=state)
