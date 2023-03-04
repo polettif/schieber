@@ -10,7 +10,7 @@ class Card:
     """
     Defines a card used in the game of Jassen.
     """
-    names = {6: '6', 7: '7', 8: '8', 9: '9', 10: 'Banner', 11: 'Under', 12: 'Ober', 13: 'Koennig', 14: 'Ass'}
+    names = {6: '6', 7: '7', 8: '8', 9: '9', 10: 'Banner', 11: 'Under', 12: 'Ober', 13: 'Koenig', 14: 'Ass'}
     trumpf_rank = {6: 6, 7: 7, 8: 8, 10: 10, 12: 12, 13: 13, 14: 14, 9: 15, 11: 16}
     format_string = '<{0}:{1}>'
 
@@ -106,7 +106,7 @@ def from_index_to_string(card_index):
 def from_index_to_card(card_index):
     """
         The index is a number between 1 and 36 representing a card in the following way:
-        SUIT    6   7   8   9   Banner  Under   Ober    Koennig Ass
+        SUIT    6   7   8   9   Banner  Under   Ober    Koenig Ass
         ROSE    1   2   3   4   5       6       7       8       9
         BELL    10  11  12  13  14      15      16      17      18
         ACORN   19  20  21  22  23      24      25      26      27
