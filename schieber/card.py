@@ -106,9 +106,9 @@ def from_index_to_string(card_index):
 def from_index_to_card(card_index):
     """
         The index is a number between 1 and 36 representing a card in the following way:
-        SUIT    6   7   8   9   Banner  Under   Ober    Koenig Ass
-        ROSE    1   2   3   4   5       6       7       8       9
-        SCHELLE    10  11  12  13  14      15      16      17      18
+        SUIT      6   7   8   9   Banner  Under   Ober    Koenig Ass
+        ROSE      1   2   3   4   5       6       7       8       9
+        SCHELLE  10  11  12  13  14      15      16      17      18
         EICHEL   19  20  21  22  23      24      25      26      27
         SCHILTE  28  29  30  31  32      33      34      35      36
         An index of 0 denotes an empty Card --> None

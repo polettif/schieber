@@ -106,7 +106,7 @@ class TrumpfColorMode(Mode):
                     card_counter.has_card_likelihood(card_counter.opponent_2_id, card, state) > 0:
                     we_can_make_all_stich = False
 
-        color = from_string_to_card(state['table'][0]['card']).suit
+        color = from_string_to_card(state.table[0]['card']).suit
         if color != self.suit:
             if not player_acting_behind:
                 if len([x[1] for x in split_cards_by_suit(card_counter.unknown_cards()) if x[0] == color]) == 0 and \
@@ -126,7 +126,7 @@ class TrumpfColorMode(Mode):
         return (we_can_make_all_stich or we_lose_stich_if_we_dont or partner_is_not_certain_to_win)
 
     def get_value_card(self, cards_by_suit, card_counter, state):
-        if len(state['table']) == 0:
+        if len(state.table) == 0:
             opponents_beating_card = {}
             for suit, suit_cards in cards_by_suit:
                 for card in suit_cards:
@@ -145,14 +145,14 @@ class TrumpfColorMode(Mode):
         cards_by_suit = split_cards_by_suit(available_cards)
         eligible = self.available_suits(available_cards)
         round_color = None
-        if len(state['table']) != 0:
-            round_color = from_string_to_card(state['table'][0]['card']).suit
+        if len(state.table) != 0:
+            round_color = from_string_to_card(state.table[0]['card']).suit
 
-        if len(state['table']) > 0 and self.have_to_serve(eligible, round_color) and (round_color != self.suit or not self.has_only_jack_of_trumpf(available_cards)):
+        if len(state.table) > 0 and self.have_to_serve(eligible, round_color) and (round_color != self.suit or not self.has_only_jack_of_trumpf(available_cards)):
             weak_cards = self.sort_by_rank([x[1] for x in cards_by_suit if x[0] == round_color][0])
 
             beatable = card_counter.has_cards_likelihood(card_counter.opponent_1_id, self.cards_beating_current_stich(card_counter.unknown_cards(), card_counter, state), state) != 0
-            if card_counter.round_leader(state) == card_counter.partner_id and (len(state['table']) == 3 or not beatable):
+            if card_counter.round_leader(state) == card_counter.partner_id and (len(state.table) == 3 or not beatable):
                 for card in weak_cards:
                     if card.value == 10:
                         return card
@@ -181,7 +181,7 @@ class TrumpfColorMode(Mode):
 
             beatable = card_counter.has_cards_likelihood(card_counter.opponent_1_id, self.cards_beating_current_stich(card_counter.unknown_cards(), card_counter, state), state) != 0
 
-            if card_counter.round_leader(state) == card_counter.partner_id and (len(state['table']) == 3 or not beatable):
+            if card_counter.round_leader(state) == card_counter.partner_id and (len(state.table) == 3 or not beatable):
                 for card in weak_cards:
                     if card.value == 10:
                         return card
@@ -218,22 +218,22 @@ class TrumpfColorMode(Mode):
             return max(bd_suits,key=lambda item:item[1])[0]
 
     def get_stich_card(self, cards_by_suit, card_counter, state):
-        if len(state['table']) > 0:
-            current_stich_color = from_string_to_card(state['table'][0]['card']).suit
+        if len(state.table) > 0:
+            current_stich_color = from_string_to_card(state.table[0]['card']).suit
             tmp_list = [x[1] for x in cards_by_suit if (x[0] == current_stich_color or x[0] == self.suit)]
             current_color_cards = [item for sublist in tmp_list for item in sublist]
             cards = self.cards_beating_current_stich(current_color_cards, card_counter, state)
             stich_cards = []
-            if len(state['table']) == 3:
+            if len(state.table) == 3:
                 stich_cards.extend(cards)
 
-            if len(cards) > 0 and len(state['table']) < 3:
+            if len(cards) > 0 and len(state.table) < 3:
                 for card in cards:
                     stronger = self.stronger_cards_unknown(card, card_counter)
                     if len(stronger) != 0:
                         # may use has_cards_likelihood (plural)
                         if card_counter.has_cards_likelihood(card_counter.opponent_1_id, stronger, state) == 0:
-                            if len(state['table']) > 0 or card_counter.has_cards_likelihood(
+                            if len(state.table) > 0 or card_counter.has_cards_likelihood(
                                     card_counter.opponent_2_id, stronger, state) == 0:
                                 stich_cards.append(card)
                     else:
@@ -261,7 +261,7 @@ class TrumpfColorMode(Mode):
         return has_only_jack
 
     def get_card_to_play(self, available_cards, card_counter, state, role):
-        current_position = len(state['table'])
+        current_position = len(state.table)
 
         cards_by_suit = split_cards_by_suit(available_cards)
         sorted_trumpf_cards = self.sort_by_rank([x[1] for x in cards_by_suit if x[0] == self.suit][0])
@@ -341,7 +341,7 @@ class TrumpfColorMode(Mode):
                 if card_counter.current_round() == 0 and card_counter.round_leader(state) == card_counter.partner_id:
                     a2card = card_counter.current_stich[card_counter.partner_id]
                     if self.is_nth_nut(1, a2card, card_counter):
-                        round_color = from_string_to_card(state['table'][0]['card']).suit
+                        round_color = from_string_to_card(state.table[0]['card']).suit
                         for card in [x[1] for x in cards_by_suit if x[0] == round_color][0]:
                             if self.is_nth_nut(2, card, card_counter):
                                 play_2nd_nut = True

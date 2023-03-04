@@ -29,7 +29,7 @@ class JassStrategy:
         return max(scores, key=lambda x: x[1])[0]
 
     def choose_card(self, allowed_cards, state, role):
-        mode = get_mode(state['trumpf'])
+        mode = get_mode(state.trumpf)
         return mode.get_card_to_play(allowed_cards, self.card_counter, state, role)
 
     def move_made(self, player_id, card, state):

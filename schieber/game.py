@@ -147,7 +147,7 @@ class Game:
         """
         cards = [played_card.card for played_card in table_cards]
         is_allowed_card = False
-        generator = player.choose_card(state=self.get_status())
+        generator = player.choose_card(state=self.get_state())
         chosen_card = next(generator)
         while not is_allowed_card:
             is_allowed_card = card_allowed(table_cards=cards, chosen_card=chosen_card, hand_cards=player.cards,
@@ -161,10 +161,10 @@ class Game:
 
     def move_made(self, player_id, card):
         for player in self.players:
-            player.move_made(player_id, card, self.get_status())
+            player.move_made(player_id, card, self.get_state())
 
     def stich_over_information(self):
-        [player.stich_over(state=self.get_status()) for player in self.players]
+        [player.stich_over(state=self.get_state()) for player in self.players]
 
     def count_points(self, stich, last):
         """
@@ -189,7 +189,7 @@ class Game:
         points = points * counting_factor[self.trumpf] if self.use_counting_factor else points
         self.teams[team_index].points += points
 
-    def get_status(self):
+    def get_state(self):
         """
         Returns the status of the game in a dictionary containing
         - the stiche
@@ -200,7 +200,7 @@ class Game:
         - the teams
         :return:
         """
-        return dict(
+        return GameState(
             stiche=[stich_dict(stich) for stich in self.stiche],
             trumpf=self.trumpf.name,
             geschoben=self.geschoben,
@@ -215,6 +215,16 @@ class Game:
         :return:
         """
         [team.reset_points() for team in self.teams]
+
+
+class GameState:
+    def __init__(self, stiche, trumpf: Trumpf, geschoben: bool, point_limit: int, table, teams):
+        self.stiche = stiche
+        self.trumpf: Trumpf = trumpf
+        self.geschoben: bool = geschoben
+        self.point_limit: int = point_limit
+        self.table = table
+        self.teams = teams
 
 
 def get_player_index(start_index):

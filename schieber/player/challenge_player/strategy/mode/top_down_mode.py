@@ -1,3 +1,4 @@
+from schieber.game import GameState
 from schieber.player.challenge_player.strategy.mode.uncolored_trumpf import UncoloredTrumpf
 from schieber.helpers.game_helper import *
 from schieber.trumpf import Trumpf
@@ -30,22 +31,22 @@ class TopDownMode(UncoloredTrumpf):
     def stronger_cards_remaining(self, card, card_counter):
         return card_counter.filter_not_dead_cards_of_same_suit(card, lambda x: x.value > card.value)
 
-    def get_stich_card(self, cards_by_suit, card_counter, state):
-        if len(state['table']) > 0:
-            current_stich_color = from_string_to_card(state['table'][0]['card']).suit
+    def get_stich_card(self, cards_by_suit, card_counter, state: GameState):
+        if len(state.table) > 0:
+            current_stich_color = from_string_to_card(state.table[0]['card']).suit
             current_color_cards = [x[1] for x in cards_by_suit if x[0] == current_stich_color][0]
             cards = self.cards_beating_current_stich(current_color_cards, card_counter, state)
             stich_cards = []
-            if len(state['table']) == 3:
+            if len(state.table) == 3:
                 stich_cards.extend(cards)
 
-            if len(cards) > 0 and len(state['table']) < 3:
+            if len(cards) > 0 and len(state.table) < 3:
                 for card in cards:
                     stronger = self.stronger_cards_unknown(card, card_counter)
                     if len(stronger) != 0:
                         #may use has_cards_likelihood (plural)
                         if card_counter.has_cards_likelihood(card_counter.opponent_1_id, stronger, state) == 0:
-                            if len(state['table']) > 0 or card_counter.has_cards_likelihood(card_counter.opponent_2_id, stronger, state) == 0:
+                            if len(state.table) > 0 or card_counter.has_cards_likelihood(card_counter.opponent_2_id, stronger, state) == 0:
                                 stich_cards.append(card)
                     else:
                         stich_cards.append(card)
@@ -62,13 +63,13 @@ class TopDownMode(UncoloredTrumpf):
         cards_by_suit = split_cards_by_suit(available_cards)
         eligible = self.available_suits(available_cards)
         round_color = None
-        if len(state['table']) != 0:
-            round_color = from_string_to_card(state['table'][0]['card']).suit
+        if len(state.table) != 0:
+            round_color = from_string_to_card(state.table[0]['card']).suit
 
         if self.have_to_serve(eligible, round_color):
             weak_cards = self.sort_by_rank([x[1] for x in cards_by_suit if x[0] == round_color][0])
             beatable = card_counter.has_cards_likelihood(card_counter.opponent_1_id, self.cards_beating_current_stich(card_counter.unknown_cards(), card_counter, state), state) != 0
-            if card_counter.round_leader(state) == card_counter.partner_id and (len(state['table']) == 3 or not beatable):
+            if card_counter.round_leader(state) == card_counter.partner_id and (len(state.table) == 3 or not beatable):
                 for card in weak_cards:
                     if card.value == 10 or card.value == 8:
                         return card
@@ -97,7 +98,7 @@ class TopDownMode(UncoloredTrumpf):
 
             beatable = card_counter.has_cards_likelihood(card_counter.opponent_1_id, self.cards_beating_current_stich(card_counter.unknown_cards(), card_counter, state), state) != 0
 
-            if card_counter.round_leader(state) == card_counter.partner_id and (len(state['table']) == 3 or not beatable):
+            if card_counter.round_leader(state) == card_counter.partner_id and (len(state.table) == 3 or not beatable):
                 for card in weak_cards:
                     if card.value == 8 or card.value == 10:
                         return card
