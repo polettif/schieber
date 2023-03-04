@@ -2,13 +2,12 @@ import setuptools
 
 setuptools.setup(
     name='schieber',
-    version='0.1.10',
-    description='Schieber is a terminal application of the popular Swiss card game Schieber and provides an API to the game',
+    version='0.2',
+    description='schieber is a command line application of the popular Swiss card game Schieber',
     long_description=open('README.md', "r").read(),
     long_description_content_type="text/markdown",
-    author='Joel Niklaus',
-    author_email='me@joelniklaus.ch',
-    url='https://github.com/JoelNiklaus/schieber',
+    maintainer='Flavio Poletti',
+    url='https://github.com/polettif/schieber',
     license=open('LICENSE', "r").read(),
     packages=setuptools.find_packages(exclude=('tests', 'docs')),
     scripts=['bin/schieber'],

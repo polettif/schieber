@@ -47,7 +47,7 @@ Please chose the trumpf by the number from 0 to 6:
 
 ## API :clipboard:
 The idea of schieber is to extend the game with your own implemented player.
-Hence schieber provides entry points to fulfill this requirement.
+Hence, schieber provides entry points to fulfill this requirement.
 
 ## Environment introduction
 To get a first feeling for the schieber playground let's have a look at 
@@ -79,7 +79,7 @@ tournament.play()
 
 ## Build your own Player :runner:
 As you might have noticed we registered two different types of players on our tournament.
-Thus the idea is to implement your own Player to beat Trick, Trick and Track.
+Thus, the idea is to implement your own Player to beat Trick, Trick and Track.
 
 Basically the Player has to provide the methods:
  * set_card(card)
@@ -91,12 +91,12 @@ Basically the Player has to provide the methods:
    * called when it's your turn to choose a card, this has to be a generator and 
    is recalled until the chosen card is allowed
 
-Additionally there is the stich_over(state) method, that is called after all 
+Additionally, there is the stich_over(state) method, that is called after all 
 players had chosen their cards.  
 
 The easiest way to implement your own player is to inherit from the BasePlayer 
 class (due to the fact that Python uses duck typing it is not absolutely necessary), 
-which provieds some basic functionality like store your cards.
+which provides some basic functionality like store your cards.
 
 To get more familiar with this concept, let's have a look at the already mentioned 
 Random Player.
@@ -123,9 +123,7 @@ def move(choices):
 ```
 What's going on here?
 
-The Random Player is pretty naive and he simply chooses randomly a card or a 
-trumpf from the list of choices. If the turn is not allowed he randomly chooses 
-a new one until the rules of Schieber are satisfied.
+The Random Player is pretty naive, he just randomly chooses an allowed card or trumpf.
 
 Other player examples are the [GreedyPlayer](schieber/player/greedy_player/greedy_player.py) or the [CliPlayer](schieber/player/cli_player.py).
 
