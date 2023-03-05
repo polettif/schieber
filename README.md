@@ -84,15 +84,13 @@ Thus, the idea is to implement your own Player to beat Trick, Trick and Track.
 Basically the Player has to provide the methods:
  * set_card(card)
    * called by the dealer to get your cards at the start of every round
- * choose_trumpf(geschoben)
-   * called when it's your turn to choose a trumpf, this has to be a generator 
-   and is recalled until the chosen trumpf is allowed
+ * choose_trumpf(state)
+   * called when it's your turn to choose a trumpf, must return an allowed trumpf.
  * choose_card(state)
-   * called when it's your turn to choose a card, this has to be a generator and 
-   is recalled until the chosen card is allowed
+   * called when it's your turn to choose a card, must return an allowed card.
 
 Additionally, there is the stich_over(state) method, that is called after all 
-players had chosen their cards.  
+players had chosen their cards. 
 
 The easiest way to implement your own player is to inherit from the BasePlayer 
 class (due to the fact that Python uses duck typing it is not absolutely necessary), 
@@ -103,23 +101,30 @@ Random Player.
 ```python
 import random
 
+from schieber.card import Card
+from schieber.game import GameState
 from schieber.player.base_player import BasePlayer
+from schieber.rules.trumpf_rules import trumpf_allowed
 from schieber.trumpf import Trumpf
 
+
 class RandomPlayer(BasePlayer):
-    def choose_trumpf(self, geschoben):
-        return move(choices=list(Trumpf))
+    def choose_trumpf(self, state: GameState) -> 'Trumpf':
+        return select_random_trumpf(state.geschoben)
 
-    def choose_card(self):
-        return move(choices=self.cards)
+    def choose_card(self, state: GameState) -> 'Card':
+        cards = self.allowed_cards(state=state)
+        random.shuffle(cards)
+        return cards[0]
 
-def move(choices):
-    allowed = False
-    while not allowed:
-        choice = random.choice(choices)
-        allowed = yield choice
-        if allowed:
-            yield None
+
+def select_random_trumpf(geschoben: bool):
+    choices = list(Trumpf)
+    random.shuffle(choices)
+    for choice in choices:
+        if trumpf_allowed(chosen_trumpf=choice, geschoben=geschoben):
+            return choice
+
 ```
 What's going on here?
 
