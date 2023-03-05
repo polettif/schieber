@@ -1,38 +1,35 @@
 import random
 
+from schieber.game import GameState
 from schieber.player.base_player import BasePlayer
 from schieber.player.challenge_player.strategy.jass_strategy import JassStrategy
 from schieber.card import Card
-from schieber.trumpf import Trumpf
+from schieber.rules.trumpf_rules import trumpf_allowed
 
 
 class ChallengePlayer(BasePlayer):
-    def set_card(self, card):
+    def take_card(self, card):
         self.cards.append(card)
         if len(self.cards) == 9:
             self.strategy = JassStrategy(self)
 
-    def choose_trumpf(self, geschoben):
+    def choose_trumpf(self, state: GameState):
         allowed = False
         while not allowed:
-            trumpf = self.strategy.chose_trumpf(self.cards, geschoben)
-            if self.trumps == 'all':
-                allowed = yield trumpf
-            elif self.trumps == 'obe_abe':
-                allowed = yield Trumpf.OBE_ABE
-            if allowed:
-                yield None
+            trumpf = self.strategy.chose_trumpf(self.cards, state)
+            if trumpf_allowed(chosen_trumpf=trumpf, geschoben=state.geschoben):
+                return trumpf
 
-    def choose_card(self, state=None):
-        if len(state['stiche']) == 0:
-            if len(state['table']) == 0:
-                if state['geschoben']:
+    def choose_card(self, state:GameState=None):
+        if len(state.stiche) == 0:
+            if len(state.table) == 0:
+                if state.geschoben:
                     self.role = 'Partner'
                 else:
                     self.role = 'Trumpf'
 
-            elif len(state['table']) == 2:
-                if state['geschoben']:
+            elif len(state.table) == 2:
+                if state.geschoben:
                     self.role = 'Trumpf'
                 else:
                     self.role = 'Partner'

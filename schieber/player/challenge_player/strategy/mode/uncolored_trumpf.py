@@ -1,11 +1,12 @@
+from schieber.game import GameState
 from schieber.player.challenge_player.strategy.mode.mode import Mode
 from schieber.helpers.game_helper import *
 from schieber.card import from_string_to_card
 
 
 class UncoloredTrumpf(Mode):
-    def get_card_to_play(self, available_cards, card_counter, state, role):
-        current_position = len(state['table'])
+    def get_card_to_play(self, available_cards, card_counter, state: GameState, role):
+        current_position = len(state.table)
         cards_by_suit = split_cards_by_suit(available_cards)
 
         bocks = list(filter(lambda x: self.is_bock(x, card_counter), available_cards))
@@ -50,7 +51,7 @@ class UncoloredTrumpf(Mode):
                 if card_counter.current_round() == 0 and card_counter.round_leader(state) == card_counter.partner_id:
                     a2card = card_counter.current_stich[card_counter.partner_id]
                     if self.is_nth_nut(1, a2card, card_counter):
-                        round_color = from_string_to_card(state['table'][0]['card']).suit
+                        round_color = from_string_to_card(state.table[0]['card']).suit
                         for card in [x[1] for x in cards_by_suit if x[0] == round_color][0]:
                             if self.is_nth_nut(2, card, card_counter):
                                 play_2nd_nut = True
@@ -78,8 +79,8 @@ class UncoloredTrumpf(Mode):
 
         return None
 
-    def get_value_card(self, cards_by_suit, card_counter, state):
-        if len(state['table']) == 0:
+    def get_value_card(self, cards_by_suit, card_counter, state: GameState):
+        if len(state.table) == 0:
             opponents_beating_card = {}
             for suit, suit_cards in cards_by_suit:
                 for card in suit_cards:
@@ -156,7 +157,7 @@ class UncoloredTrumpf(Mode):
                     card_counter.has_card_likelihood(card_counter.opponent_2_id, card, state) > 0:
                     we_can_make_all_stich = False
 
-        color = from_string_to_card(state['table'][0]['card']).suit
+        color = from_string_to_card(state.table[0]['card']).suit
         if not player_acting_behind:
             if len([x[1] for x in split_cards_by_suit(card_counter.unknown_cards()) if x[0] == color]) == 0 and \
                     len([x[1] for x in cards_by_suit if x[0] == color]) > 1:

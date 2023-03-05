@@ -1,6 +1,7 @@
 import pytest
 
 from schieber.card import Card
+from schieber.game import Game
 from schieber.player.greedy_player.trumpf_decision import choose_trumpf, TrumpfType
 from schieber.suit import Suit
 from schieber.trumpf import Trumpf

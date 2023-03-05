@@ -47,7 +47,7 @@ Please chose the trumpf by the number from 0 to 6:
 
 ## API :clipboard:
 The idea of schieber is to extend the game with your own implemented player.
-Hence schieber provides entry points to fulfill this requirement.
+Hence, schieber provides entry points to fulfill this requirement.
 
 ## Environment introduction
 To get a first feeling for the schieber playground let's have a look at 
@@ -79,53 +79,56 @@ tournament.play()
 
 ## Build your own Player :runner:
 As you might have noticed we registered two different types of players on our tournament.
-Thus the idea is to implement your own Player to beat Trick, Trick and Track.
+Thus, the idea is to implement your own Player to beat Trick, Trick and Track.
 
 Basically the Player has to provide the methods:
- * set_card(card)
-   * called by the dealer to get your cards at the start of every round
- * choose_trumpf(geschoben)
-   * called when it's your turn to choose a trumpf, this has to be a generator 
-   and is recalled until the chosen trumpf is allowed
+ * take_card(card)
+   * called by the dealer to give players cards at the start of every round
+ * choose_trumpf(state)
+   * called when it's your turn to choose a trumpf, must return an allowed trumpf.
  * choose_card(state)
-   * called when it's your turn to choose a card, this has to be a generator and 
-   is recalled until the chosen card is allowed
+   * called when it's your turn to choose a card, must return an allowed card.
 
-Additionally there is the stich_over(state) method, that is called after all 
-players had chosen their cards.  
+Additionally, there is the stich_over(state) method, that is called after all 
+players had chosen their cards. 
 
 The easiest way to implement your own player is to inherit from the BasePlayer 
 class (due to the fact that Python uses duck typing it is not absolutely necessary), 
-which provieds some basic functionality like store your cards.
+which provides some basic functionality like store your cards.
 
 To get more familiar with this concept, let's have a look at the already mentioned 
 Random Player.
 ```python
 import random
 
+from schieber.card import Card
+from schieber.game import GameState
 from schieber.player.base_player import BasePlayer
+from schieber.rules.trumpf_rules import trumpf_allowed
 from schieber.trumpf import Trumpf
 
+
 class RandomPlayer(BasePlayer):
-    def choose_trumpf(self, geschoben):
-        return move(choices=list(Trumpf))
+    def choose_trumpf(self, state: GameState) -> 'Trumpf':
+        return select_random_trumpf(state.geschoben)
 
-    def choose_card(self):
-        return move(choices=self.cards)
+    def choose_card(self, state: GameState) -> 'Card':
+        cards = self.allowed_cards(state=state)
+        random.shuffle(cards)
+        return cards[0]
 
-def move(choices):
-    allowed = False
-    while not allowed:
-        choice = random.choice(choices)
-        allowed = yield choice
-        if allowed:
-            yield None
+
+def select_random_trumpf(geschoben: bool):
+    choices = list(Trumpf)
+    random.shuffle(choices)
+    for choice in choices:
+        if trumpf_allowed(chosen_trumpf=choice, geschoben=geschoben):
+            return choice
+
 ```
 What's going on here?
 
-The Random Player is pretty naive and he simply chooses randomly a card or a 
-trumpf from the list of choices. If the turn is not allowed he randomly chooses 
-a new one until the rules of Schieber are satisfied.
+The Random Player is pretty naive, he just randomly chooses an allowed card or trumpf.
 
 Other player examples are the [GreedyPlayer](schieber/player/greedy_player/greedy_player.py) or the [CliPlayer](schieber/player/cli_player.py).
 

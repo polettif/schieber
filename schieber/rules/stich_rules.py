@@ -1,5 +1,6 @@
 from functools import partial
 
+from schieber.card import Card
 from schieber.stich import Stich
 from schieber.trumpf import Trumpf
 
@@ -32,19 +33,20 @@ def _stich_trumpf_cards(trumpfs):
         return trumpfs[values.index(NAELL)][1]
     return max(trumpfs)[1]
 
-    #return values.index(max(values))
+    # return values.index(max(values))
 
 
 stich_rules = {
     Trumpf.OBE_ABE: partial(stich_obe_unde, operation=max, trumpf=Trumpf.OBE_ABE),
     Trumpf.UNDE_UFE: partial(stich_obe_unde, operation=min, trumpf=Trumpf.UNDE_UFE),
+    Trumpf.ROSE: partial(stich_trumpf, trumpf=Trumpf.ROSE),
+    Trumpf.EICHEL: partial(stich_trumpf, trumpf=Trumpf.EICHEL),
+    Trumpf.SCHELLE: partial(stich_trumpf, trumpf=Trumpf.SCHELLE),
+    Trumpf.SCHILTE: partial(stich_trumpf, trumpf=Trumpf.SCHILTE),
 }
 
-for trumpf in filter(lambda x: x != Trumpf.OBE_ABE and x != Trumpf.UNDE_UFE and x != Trumpf.SCHIEBEN, Trumpf):
-    stich_rules[trumpf] = partial(stich_trumpf, trumpf=trumpf)
 
-
-def card_allowed(table_cards, chosen_card, hand_cards, trumpf):
+def card_allowed(table_cards, chosen_card, hand_cards, trumpf: Trumpf):
     chosen_suit = chosen_card.suit
 
     if chosen_card not in hand_cards:
@@ -69,7 +71,7 @@ def card_allowed(table_cards, chosen_card, hand_cards, trumpf):
     return not (first_suit in hand_suits)
 
 
-def is_trumpf_under(trumpf, card):
+def is_trumpf_under(trumpf, card: Card):
     return card.suit.name == trumpf.name and card.value == UNDER
 
 
@@ -95,7 +97,7 @@ def is_chosen_card_best_trumpf(table_cards, chosen_card, trumpf):
     return winner_index == chosen_card_index
 
 
-def allowed_cards(hand_cards, table_cards, trumpf):
+def allowed_cards(hand_cards, table_cards, trumpf: Trumpf):
     cards = []
     if len(table_cards) > 0 or len(hand_cards) > 1:
         for card in hand_cards:

@@ -4,15 +4,30 @@ from multiprocessing import Condition
 from schieber.dealer import Dealer
 from schieber.rules.stich_rules import stich_rules, card_allowed
 from schieber.rules.trumpf_rules import trumpf_allowed
-from schieber.rules.count_rules import count_stich, counting_factor
+from schieber.rules.count_rules import count_stich
 from schieber.stich import PlayedCard, stich_dict, played_card_dict
+from schieber.team import Team
 from schieber.trumpf import Trumpf
 
 logger = logging.getLogger(__name__)
 
 
+class Player:
+    def __init__(self):
+        self.name = "unknown"
+
+
 class Game:
-    def __init__(self, teams=None, point_limit=1500, use_counting_factor=False, seed=None):
+    def __init__(self, teams=None, point_limit=1500,
+                 counting_factors=None,
+                 seed=None):
+        if teams is None:
+            team_1 = Team(players=[Player(), Player()])
+            team_2 = Team(players=[Player(), Player()])
+            teams = [team_1, team_2]
+        if counting_factors is None:
+            counting_factors = {Trumpf.ROSE: 1, Trumpf.EICHEL: 1, Trumpf.SCHELLE: 2, Trumpf.SCHILTE: 2,
+                                Trumpf.OBE_ABE: 3, Trumpf.UNDE_UFE: 3}
         self.teams = teams
         self.point_limit = point_limit
         self.players = [teams[0].players[0], teams[1].players[0], teams[0].players[1], teams[1].players[1]]
@@ -21,7 +36,7 @@ class Game:
         self.trumpf = None
         self.stiche = []
         self.cards_on_table = []
-        self.use_counting_factor = use_counting_factor
+        self.counting_factors = counting_factors
         self.seed = seed
         self.endless_play_control = Condition()  # used to control the termination of the play_endless method
         self.stop_playing = False  # has to be set to true in order to stop the endless play
@@ -87,15 +102,18 @@ class Game:
         self.dealer.shuffle_cards(self.seed)
         self.dealer.deal_cards()
         self.define_trumpf(start_player_index=start_player_index)
-        logger.info('Chosen Trumpf: {0} \n'.format(self.trumpf.name))
+        logger.info('Chosen Trumpf: {0} \n'.format(self.trumpf))
+
         for i in range(9):
             stich = self.play_stich(start_player_index)
             self.count_points(stich, last=(i == 8))
+
             logger.info('\nStich: {0} \n'.format(stich.player))
             logger.info('{}{}\n'.format('-' * 180, self.trumpf))
             start_player_index = self.players.index(stich.player)
             self.stiche.append(stich)
             self.stich_over_information()
+
             if (self.teams[0].won(self.point_limit) or self.teams[1].won(self.point_limit)) and not whole_rounds:
                 return True
         return False
@@ -106,19 +124,14 @@ class Game:
         :param start_player_index: The player which is on the right side of the dealer
         :return:
         """
-        is_allowed_trumpf = False
-        generator = self.players[start_player_index].choose_trumpf(geschoben=self.geschoben)
-        chosen_trumpf = next(generator)
+        chosen_trumpf = self.players[start_player_index].choose_trumpf(self.get_state())
         if chosen_trumpf == Trumpf.SCHIEBEN:
             self.geschoben = True
-            generator = self.players[(start_player_index + 2) % 4].choose_trumpf(geschoben=self.geschoben)
-            chosen_trumpf = next(generator)
-            while not is_allowed_trumpf:
-                is_allowed_trumpf = trumpf_allowed(chosen_trumpf=chosen_trumpf, geschoben=self.geschoben)
-                trumpf = generator.send(is_allowed_trumpf)
-                chosen_trumpf = chosen_trumpf if trumpf is None else trumpf
+            chosen_trumpf = self.players[(start_player_index + 2) % 4].choose_trumpf(self.get_state())
+            is_allowed_trumpf = trumpf_allowed(chosen_trumpf=chosen_trumpf, geschoben=self.geschoben)
+            if not is_allowed_trumpf:
+                raise Exception('Trumpf not allowed')
         self.trumpf = chosen_trumpf
-        return self.trumpf
 
     def play_stich(self, start_player_index):
         """
@@ -147,24 +160,19 @@ class Game:
         """
         cards = [played_card.card for played_card in table_cards]
         is_allowed_card = False
-        generator = player.choose_card(state=self.get_status())
-        chosen_card = next(generator)
-        while not is_allowed_card:
-            is_allowed_card = card_allowed(table_cards=cards, chosen_card=chosen_card, hand_cards=player.cards,
-                                           trumpf=self.trumpf)
-            card = generator.send(is_allowed_card)
-            chosen_card = chosen_card if card is None else card
-        else:
-            logger.info('Table: {0}:{1}'.format(player, chosen_card))
-            player.cards.remove(chosen_card)
+        chosen_card = player.choose_card(state=self.get_state())
+        if not card_allowed(table_cards=cards, chosen_card=chosen_card, hand_cards=player.cards, trumpf=self.trumpf):
+            Exception("Card not allowed")
+        logger.info('Table: {0}:{1}'.format(player, chosen_card))
+        player.cards.remove(chosen_card)
         return chosen_card
 
     def move_made(self, player_id, card):
         for player in self.players:
-            player.move_made(player_id, card, self.get_status())
+            player.move_made(player_id, card, self.get_state())
 
     def stich_over_information(self):
-        [player.stich_over(state=self.get_status()) for player in self.players]
+        [player.stich_over(state=self.get_state()) for player in self.players]
 
     def count_points(self, stich, last):
         """
@@ -186,27 +194,18 @@ class Game:
         :return:
         """
         points = count_stich(cards, self.trumpf, last=last)
-        points = points * counting_factor[self.trumpf] if self.use_counting_factor else points
+        points = points * self.counting_factors[self.trumpf]
         self.teams[team_index].points += points
 
-    def get_status(self):
-        """
-        Returns the status of the game in a dictionary containing
-        - the stiche
-        - the trumpf
-        - if it has been geschoben
-        - the point limit
-        - the cards currently on the table
-        - the teams
-        :return:
-        """
-        return dict(
+    def get_state(self) -> 'GameState':
+        return GameState(
             stiche=[stich_dict(stich) for stich in self.stiche],
-            trumpf=self.trumpf.name,
+            trumpf=self.trumpf,
             geschoben=self.geschoben,
             point_limit=self.point_limit,
             table=[played_card_dict(played_card) for played_card in self.cards_on_table],
-            teams=[dict(points=team.points) for team in self.teams]
+            teams=[dict(points=team.points) for team in self.teams],
+            counting_factors=self.counting_factors
         )
 
     def reset_points(self):
@@ -215,6 +214,29 @@ class Game:
         :return:
         """
         [team.reset_points() for team in self.teams]
+
+
+class GameState:
+    """
+    Returns the status of the game in a dictionary containing
+    - the stiche
+    - the trumpf
+    - if it has been geschoben
+    - the point limit
+    - the cards currently on the table
+    - the teams
+    - counting factors
+    :return:
+    """
+
+    def __init__(self, stiche, trumpf: Trumpf, geschoben: bool, point_limit: int, table, teams, counting_factors):
+        self.stiche = stiche
+        self.trumpf: Trumpf = trumpf
+        self.geschoben: bool = geschoben
+        self.point_limit: int = point_limit
+        self.table = table
+        self.teams = teams
+        self.counting_factors = counting_factors
 
 
 def get_player_index(start_index):

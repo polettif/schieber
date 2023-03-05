@@ -23,4 +23,4 @@ class Dealer:
         :return:
         """
         for i, card in enumerate(self.deck.cards):
-            self.players[i % 4].set_card(card=card)
+            self.players[i % 4].take_card(card=card)
