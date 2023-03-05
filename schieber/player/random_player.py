@@ -15,10 +15,10 @@ def select_random_trumpf(geschoben: bool):
 
 
 class RandomPlayer(BasePlayer):
-    def choose_trumpf(self, state: GameState):
+    def choose_trumpf(self, state: GameState) -> 'Trumpf':
         return select_random_trumpf(state.geschoben)
 
-    def choose_card(self, state=None):
+    def choose_card(self, state: GameState) -> 'Card':
         cards = self.allowed_cards(state=state)
         random.shuffle(cards)
         return cards[0]

@@ -197,7 +197,7 @@ class Game:
         points = points * self.counting_factors[self.trumpf]
         self.teams[team_index].points += points
 
-    def get_state(self):
+    def get_state(self) -> 'GameState':
         return GameState(
             stiche=[stich_dict(stich) for stich in self.stiche],
             trumpf=self.trumpf,

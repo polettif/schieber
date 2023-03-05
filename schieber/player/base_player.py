@@ -1,6 +1,6 @@
 import inspect
 
-from schieber.card import from_string_to_card
+from schieber.card import from_string_to_card, Card
 from schieber.game import GameState
 from schieber.trumpf import Trumpf
 from schieber.rules.stich_rules import allowed_cards
@@ -30,10 +30,10 @@ class BasePlayer:
     def set_card(self, card):
         self.cards.append(card)
 
-    def choose_trumpf(self, state: GameState):
+    def choose_trumpf(self, state: GameState) -> 'Trumpf':
         raise NotImplementedError(str(inspect.stack()[1][3]))
 
-    def choose_card(self, state: GameState):
+    def choose_card(self, state: GameState) -> 'Card':
         raise NotImplementedError(str(inspect.stack()[1][3]))
 
     def move_made(self, player_id, card, state):
