@@ -4,6 +4,7 @@ from schieber.game import GameState
 from schieber.player.base_player import BasePlayer
 from schieber.player.challenge_player.strategy.jass_strategy import JassStrategy
 from schieber.card import Card
+from schieber.rules.trumpf_rules import trumpf_allowed
 from schieber.trumpf import Trumpf
 
 
@@ -13,16 +14,12 @@ class ChallengePlayer(BasePlayer):
         if len(self.cards) == 9:
             self.strategy = JassStrategy(self)
 
-    def choose_trumpf(self, geschoben):
+    def choose_trumpf(self, state: GameState):
         allowed = False
         while not allowed:
-            trumpf = self.strategy.chose_trumpf(self.cards, geschoben)
-            if self.trumps == 'all':
-                allowed = yield trumpf
-            elif self.trumps == 'obe_abe':
-                allowed = yield Trumpf.OBE_ABE
-            if allowed:
-                yield None
+            trumpf = self.strategy.chose_trumpf(self.cards, state)
+            if trumpf_allowed(chosen_trumpf=trumpf, geschoben=state.geschoben):
+                return trumpf
 
     def choose_card(self, state:GameState=None):
         if len(state.stiche) == 0:

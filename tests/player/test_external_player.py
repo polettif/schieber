@@ -31,7 +31,7 @@ def test_control():
     team_1 = Team(players=[players[0], players[2]])
     team_2 = Team(players=[players[1], players[3]])
     teams = [team_1, team_2]
-    game = Game(teams, point_limit=1000, use_counting_factor=False, seed=1)
+    game = Game(teams, point_limit=1000, seed=1)
 
     thread = Thread(target=game.play_endless)
     thread.start()
