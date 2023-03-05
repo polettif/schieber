@@ -160,7 +160,6 @@ class Game:
         :return: the card chosen by the players
         """
         cards = [played_card.card for played_card in table_cards]
-        is_allowed_card = False
         chosen_card = player.choose_card(state=self.get_state())
         if not card_allowed(table_cards=cards, chosen_card=chosen_card, hand_cards=player.cards, trumpf=self.trumpf):
             Exception("Card not allowed")

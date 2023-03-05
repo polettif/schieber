@@ -15,15 +15,15 @@ from schieber.rules.suit import Suit
 
 class CardCounter:
     def __init__(self, me):
-        self.played_cards = [[],[],[],[]]
-        self.flags = [[],[],[],[]]
+        self.played_cards = [[], [], [], []]
+        self.flags = [[], [], [], []]
         self.played_count = 0
         self.current_stich = {}
         self.my_id = me.id
         self.me = me
         self.partner_id = (self.my_id + 2) % 4
-        self.opponent_1_id = (self.my_id+1)%4
-        self.opponent_2_id = (self.my_id+3)%4
+        self.opponent_1_id = (self.my_id + 1) % 4
+        self.opponent_2_id = (self.my_id + 3) % 4
 
     def card_played(self, player_id, card, state):
         self.played_cards[player_id].append(card)
@@ -36,18 +36,19 @@ class CardCounter:
             self.current_stich = {}
 
     def current_round(self):
-        return floor(self.played_count/4)
+        return floor(self.played_count / 4)
 
     def update_flags(self, player_id, card, state):
         current_stich_color = None
         if len(state.table) > 0:
-            current_stich_color = from_string_to_card(state.tableS[0]['card']).suit
+            current_stich_color = from_string_to_card(state.table[0]['card']).suit
 
         mode = get_mode(state.trumpf)
 
         if len(self.current_stich) == 4:
-            if player_id == self.partner_id and self.round_leader(state) != self.my_id and self.round_leader(state) != self.partner_id:
-                #neither of us wins, A2 played last card -> A2 doesn't have anything beating current stich
+            if player_id == self.partner_id and self.round_leader(state) != self.my_id and self.round_leader(
+                    state) != self.partner_id:
+                # neither of us wins, A2 played last card -> A2 doesn't have anything beating current stich
                 for stronger_card in mode.stronger_cards_remaining(self.current_stich[self.round_leader(state)], self):
                     self.flags[player_id].append(DoesntHaveCardFlag(stronger_card))
 
@@ -58,7 +59,8 @@ class CardCounter:
                         self.flags[player_id].append(DoesntHaveCardFlag(mode.get_current_bock(suit, self)))
 
             if not self.had_stich_previously(player_id):
-                if not (self.current_round() == 0 and state.geschoben and (mode.trumpf_name().name in [x.name for x in Suit])):
+                if not (self.current_round() == 0 and state.geschoben and (
+                        mode.trumpf_name().name in [x.name for x in Suit])):
                     self.flags[player_id].append(PreviouslyHadStichFlag())
 
             if self.round_leader(state) == self.partner_id:
@@ -74,12 +76,14 @@ class CardCounter:
                         for suit_cards in split_cards_by_suit(self.unknown_cards()):
                             if suit_cards[0].name == mode.trumpf_name().name:
                                 for trumpf_card in suit_cards[1]:
-                                    self.flags[(self.my_id + 1)%4].append(DoesntHaveCardFlag(trumpf_card))
-                                    self.flags[(self.my_id + 3)%4].append(DoesntHaveCardFlag(trumpf_card))
+                                    self.flags[(self.my_id + 1) % 4].append(DoesntHaveCardFlag(trumpf_card))
+                                    self.flags[(self.my_id + 3) % 4].append(DoesntHaveCardFlag(trumpf_card))
 
         if len(self.current_stich) > 1:
             if card.suit != current_stich_color:
-                if (mode.trumpf_name().name in [x.name for x in Suit] and card.suit != mode.trumpf_name().name) or mode.trumpf_name().name not in [x.name for x in Suit]:
+                if (mode.trumpf_name().name in [x.name for x in
+                                                Suit] and card.suit != mode.trumpf_name().name) or mode.trumpf_name().name not in [
+                    x.name for x in Suit]:
                     self.flags[player_id].append(FailedToServeSuitFlag(current_stich_color))
                     self.flags[player_id].append(SuitVerworfenFlag(card.suit))
 
@@ -99,7 +103,7 @@ class CardCounter:
 
     def cards_played(self):
         played = []
-        for x in range(0,4):
+        for x in range(0, 4):
             played.extend(self.played_cards[x])
         return played
 
@@ -121,7 +125,7 @@ class CardCounter:
 
     def dead_cards(self):
         dead = []
-        current_round = int(self.played_count/4)
+        current_round = int(self.played_count / 4)
         for player_id in range(0, 4):
             dead.extend(self.played_cards[player_id][0:current_round])
         return dead
@@ -155,7 +159,7 @@ class CardCounter:
             return 0
 
         if state.trumpf == card.suit and card.value == 11:
-            return 1/3
+            return 1 / 3
 
         for flag in self.flags[player_id]:
             if isinstance(flag, FailedToServeSuitFlag):
@@ -206,6 +210,7 @@ class CardCounter:
     def tossed_suits(self, player_id):
         return list(map(lambda y: y.color, filter(lambda x: isinstance(x, SuitVerworfenFlag), self.flags[player_id])))
 
+
 def get_mode(trumpf):
     return {
         'OBE_ABE': TopDownMode(),
@@ -214,4 +219,4 @@ def get_mode(trumpf):
         'SCHELLE': TrumpfColorMode(Suit['SCHELLE']),
         'EICHEL': TrumpfColorMode(Suit['EICHEL']),
         'SCHILTE': TrumpfColorMode(Suit['SCHILTE']),
-    }[trumpf]
+    }[trumpf.name]
