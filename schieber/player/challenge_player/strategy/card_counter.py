@@ -1,17 +1,17 @@
-from schieber.player.challenge_player.strategy.mode.trumpf_color_mode import *
-from schieber.player.challenge_player.strategy.mode.top_down_mode import *
-from schieber.player.challenge_player.strategy.mode.bottom_up_mode import *
-from schieber.player.challenge_player.strategy.flags.doesnt_habe_card_flag import DoesntHaveCardFlag
-from schieber.player.challenge_player.strategy.flags.previously_had_stich_flag import PreviouslyHadStichFlag
-from schieber.player.challenge_player.strategy.flags.falied_to_serve_suit_flag import FailedToServeSuitFlag
-from schieber.player.challenge_player.strategy.flags.suit_verworfen_flag import SuitVerworfenFlag
-from schieber.deck import Deck
+from math import floor
+
 from schieber.card import from_string_to_card
+from schieber.deck import Deck
+from schieber.player.challenge_player.strategy.flags.doesnt_habe_card_flag import DoesntHaveCardFlag
+from schieber.player.challenge_player.strategy.flags.falied_to_serve_suit_flag import FailedToServeSuitFlag
+from schieber.player.challenge_player.strategy.flags.previously_had_stich_flag import PreviouslyHadStichFlag
+from schieber.player.challenge_player.strategy.flags.suit_verworfen_flag import SuitVerworfenFlag
+from schieber.player.challenge_player.strategy.mode.bottom_up_mode import *
+from schieber.player.challenge_player.strategy.mode.top_down_mode import *
+from schieber.player.challenge_player.strategy.mode.trumpf_color_mode import *
 from schieber.rules.stich_rules import stich_rules
-from schieber.trumpf import get_trumpf
 from schieber.stich import PlayedCard
 from schieber.suit import Suit
-from math import floor
 
 
 class CardCounter:
@@ -87,7 +87,7 @@ class CardCounter:
     def round_leader(self, state):
         if len(self.get_table_cards()) == 0:
             return None
-        return stich_rules[get_trumpf(state.trumpf)](played_cards=self.get_table_cards()).player
+        return stich_rules[state.trumpf](played_cards=self.get_table_cards()).player
 
     def get_hand(self):
         return self.me.cards

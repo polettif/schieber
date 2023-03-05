@@ -1,7 +1,7 @@
+from schieber.card import from_string_to_card
 from schieber.game import GameState
 from schieber.helpers.game_helper import *
-from schieber.card import from_string_to_card
-from schieber.trumpf import get_trumpf
+
 
 class Mode:
     def is_bock(self, c, c_counter):
@@ -37,7 +37,7 @@ class Mode:
         else:
             beating_cards = available_cards
 
-        return sorted(beating_cards, key=lambda card: card.get_score(get_trumpf(state.trumpf)))
+        return sorted(beating_cards, key=lambda card: card.get_score(state.trumpf))
 
     def bock_distance(self, card, card_counter, state: GameState):
         stronger = card_counter.filter_not_dead_cards_of_same_suit(card, lambda x: x.value > card.value)
