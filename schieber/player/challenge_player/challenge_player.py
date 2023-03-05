@@ -5,7 +5,6 @@ from schieber.player.base_player import BasePlayer
 from schieber.player.challenge_player.strategy.jass_strategy import JassStrategy
 from schieber.card import Card
 from schieber.rules.trumpf_rules import trumpf_allowed
-from schieber.trumpf import Trumpf
 
 
 class ChallengePlayer(BasePlayer):
