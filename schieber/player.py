@@ -6,7 +6,7 @@ from schieber.rules.trumpf import Trumpf
 from schieber.rules.stich_rules import allowed_cards
 
 
-class BasePlayer:
+class Player:
     def __init__(self, name='unknown', seed=None):
         """
         :param name:
@@ -42,6 +42,7 @@ class BasePlayer:
     def stich_over(self, state=None):
         pass
 
+    # TODO move to stich or stich_rules
     def allowed_cards(self, state: GameState):
         return self.allowed_cards_with_hand_cards(state, self.cards)
 

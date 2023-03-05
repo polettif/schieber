@@ -1,9 +1,9 @@
 from schieber.game import GameState
-from schieber.players.base_player import BasePlayer
+from schieber.player import Player
 from schieber.rules.trumpf_rules import trumpf_allowed
 
 
-class CliPlayer(BasePlayer):
+class CliPlayer(Player):
     def choose_trumpf(self, state: GameState) -> 'Trumpf':
         self._print_cards()
         print('\nTrumpf:')

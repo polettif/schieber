@@ -12,9 +12,10 @@ from schieber.rules.trumpf import Trumpf
 logger = logging.getLogger(__name__)
 
 
-class Player:
+class EmptyPlayer:  # circular reference via GameState if inheriting Player
     def __init__(self):
-        self.name = "unknown"
+        super().__init__()
+        self.name = "empty"
 
 
 class Game:
@@ -22,8 +23,8 @@ class Game:
                  counting_factors=None,
                  seed=None):
         if teams is None:
-            team_1 = Team(players=[Player(), Player()])
-            team_2 = Team(players=[Player(), Player()])
+            team_1 = Team(players=[EmptyPlayer(), EmptyPlayer()])
+            team_2 = Team(players=[EmptyPlayer(), EmptyPlayer()])
             teams = [team_1, team_2]
         if counting_factors is None:
             counting_factors = {Trumpf.ROSE: 1, Trumpf.EICHEL: 1, Trumpf.SCHELLE: 2, Trumpf.SCHILTE: 2,

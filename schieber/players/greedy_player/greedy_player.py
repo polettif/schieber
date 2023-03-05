@@ -1,9 +1,9 @@
-from schieber.players.base_player import BasePlayer
+from schieber.player import Player
 from schieber.players.greedy_player import trumpf_decision
 from schieber.rules.trumpf import Trumpf
 
 
-class GreedyPlayer(BasePlayer):
+class GreedyPlayer(Player):
     # TODO Does not fit base_player contract choose_trumpf(state: GameState)
     def choose_trumpf(self, geschoben):
         allowed = False
