@@ -8,7 +8,7 @@ from schieber.rules.trumpf_rules import trumpf_allowed
 
 
 class ChallengePlayer(BasePlayer):
-    def set_card(self, card):
+    def take_card(self, card):
         self.cards.append(card)
         if len(self.cards) == 9:
             self.strategy = JassStrategy(self)

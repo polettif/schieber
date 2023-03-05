@@ -27,7 +27,7 @@ class BasePlayer:
         """
         return dict(name=self.name, type=type(self).__name__)
 
-    def set_card(self, card):
+    def take_card(self, card):
         self.cards.append(card)
 
     def choose_trumpf(self, state: GameState) -> 'Trumpf':

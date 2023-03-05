@@ -82,8 +82,8 @@ As you might have noticed we registered two different types of players on our to
 Thus, the idea is to implement your own Player to beat Trick, Trick and Track.
 
 Basically the Player has to provide the methods:
- * set_card(card)
-   * called by the dealer to get your cards at the start of every round
+ * take_card(card)
+   * called by the dealer to give players cards at the start of every round
  * choose_trumpf(state)
    * called when it's your turn to choose a trumpf, must return an allowed trumpf.
  * choose_card(state)
