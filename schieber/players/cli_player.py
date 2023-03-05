@@ -1,5 +1,5 @@
 from schieber.game import GameState
-from schieber.player.base_player import BasePlayer
+from schieber.players.base_player import BasePlayer
 from schieber.rules.trumpf_rules import trumpf_allowed
 
 

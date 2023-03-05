@@ -2,7 +2,7 @@ import pytest
 
 from schieber.card import Card
 from schieber.rules.suit import Suit
-from schieber.player.challenge_player.strategy.mode.top_down_mode import TopDownMode
+from schieber.players.challenge_player.strategy.mode.top_down_mode import TopDownMode
 
 
 @pytest.fixture

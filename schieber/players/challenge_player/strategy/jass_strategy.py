@@ -1,4 +1,4 @@
-from schieber.player.challenge_player.strategy.card_counter import *
+from schieber.players.challenge_player.strategy.card_counter import *
 from schieber.rules.trumpf import Trumpf
 
 

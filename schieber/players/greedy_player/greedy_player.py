@@ -1,5 +1,5 @@
-from schieber.player.base_player import BasePlayer
-from schieber.player.greedy_player import trumpf_decision
+from schieber.players.base_player import BasePlayer
+from schieber.players.greedy_player import trumpf_decision
 from schieber.rules.trumpf import Trumpf
 
 

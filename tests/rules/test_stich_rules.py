@@ -4,7 +4,7 @@ from schieber.rules.stich_rules import stich_rules, card_allowed, allowed_cards,
     is_chosen_card_best_trumpf
 from schieber.rules.trumpf import Trumpf
 from schieber.card import Card
-from schieber.player.random_player import RandomPlayer
+from schieber.players.random_player import RandomPlayer
 from schieber.stich import PlayedCard
 from schieber.rules.suit import Suit
 

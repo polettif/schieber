@@ -30,7 +30,7 @@ class Tournament:
 
     def register_player(self, player):
         """
-        Adds another player if there are still less than 4 players
+        Adds another players if there are still less than 4 players
         :param player:
         :return:
         """

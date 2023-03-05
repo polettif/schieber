@@ -84,11 +84,11 @@ class Game:
         """
         Plays a game from the start to the end in the following manner:
         1. The dealer shuffles the cards
-        2. The dealer deals 9 cards to each player
-        3. The player on the right side of the dealer chooses the trumpf. If he/she chooses 'geschoben' his/her partner
+        2. The dealer deals 9 cards to each players
+        3. The players on the right side of the dealer chooses the trumpf. If he/she chooses 'geschoben' his/her partner
             can choose the trumpf.
         4. For 9 rounds/stichs let the players play their cards.
-        5. After each stich count the points, update the starting player based on who won the stich and add the cards
+        5. After each stich count the points, update the starting players based on who won the stich and add the cards
             played in the stich to the already played stichs.
         6. Check if a team has reached the point limit
         :param start_player_index:
@@ -120,8 +120,8 @@ class Game:
 
     def define_trumpf(self, start_player_index):
         """
-        Sets the trumpf based on the choice of the player assigned to choose the trumpf
-        :param start_player_index: The player which is on the right side of the dealer
+        Sets the trumpf based on the choice of the players assigned to choose the trumpf
+        :param start_player_index: The players which is on the right side of the dealer
         :return:
         """
         chosen_trumpf = self.players[start_player_index].choose_trumpf(self.get_state())
@@ -136,7 +136,7 @@ class Game:
     def play_stich(self, start_player_index):
         """
         Plays one entire stich
-        :param start_player_index: the index of the player who won the last stich or was assigned to choose the trumpf
+        :param start_player_index: the index of the players who won the last stich or was assigned to choose the trumpf
         :return: the stich containing the played cards and the winner
         """
         self.cards_on_table = []
@@ -153,10 +153,10 @@ class Game:
 
     def play_card(self, table_cards, player):
         """
-        Checks if the card played by the player is allowed. If yes removes the card from the players hand.
+        Checks if the card played by the players is allowed. If yes removes the card from the players hand.
         :param table_cards:
         :param player:
-        :return: the card chosen by the player
+        :return: the card chosen by the players
         """
         cards = [played_card.card for played_card in table_cards]
         is_allowed_card = False

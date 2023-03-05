@@ -2,7 +2,7 @@ import pytest
 from timeit import default_timer as timer
 from math import sqrt, floor
 
-from schieber.player.random_player import RandomPlayer
+from schieber.players.random_player import RandomPlayer
 from schieber.tournament import Tournament
 
 

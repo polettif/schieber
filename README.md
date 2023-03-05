@@ -62,11 +62,12 @@ tournament = Tournament(point_limit=1500)
 
 2. Add the players to your tournament. In our example we use the erratic 
 RandomPlayers Tick, Trick, Track and the GreedyPlayer Dagobert.
-```python
-from schieber.player.random_player import RandomPlayer
-from schieber.player.greedy_player.greedy_player import GreedyPlayer
 
-players = [RandomPlayer(name='Tick'), RandomPlayer(name='Trick'), 
+```python
+from schieber.players.random_player import RandomPlayer
+from schieber.players.greedy_player.greedy_player import GreedyPlayer
+
+players = [RandomPlayer(name='Tick'), RandomPlayer(name='Trick'),
            RandomPlayer(name='Track'), GreedyPlayer(name='Dagobert')]
 
 [tournament.register_player(player) for player in players]
@@ -104,7 +105,7 @@ import random
 
 from schieber.card import Card
 from schieber.game import GameState
-from schieber.player.base_player import BasePlayer
+from schieber.players.base_player import BasePlayer
 from schieber.rules.trumpf_rules import trumpf_allowed
 from schieber.rules.trumpf import Trumpf
 
@@ -131,6 +132,6 @@ What's going on here?
 
 The Random Player is pretty naive, he just randomly chooses an allowed card or trumpf.
 
-Other player examples are the [GreedyPlayer](schieber/player/greedy_player/greedy_player.py) or the [CliPlayer](schieber/player/cli_player.py).
+Other player examples are the [GreedyPlayer](schieber/players/greedy_player/greedy_player.py) or the [CliPlayer](schieber/players/cli_player.py).
 
 Now you should be ready to get your hands dirty to implement your own player and beat the random players Tick, Trick and Track! :trophy:

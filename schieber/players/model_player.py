@@ -2,24 +2,24 @@ import logging
 
 from gym_jass.envs import SchieberEnv
 from jass_bot.rl import JassPolicy
-from schieber.player.greedy_player.greedy_player import GreedyPlayer
+from schieber.players.greedy_player.greedy_player import GreedyPlayer
 from stable_baselines import PPO2
 from stable_baselines.common.vec_env import DummyVecEnv
 
-from schieber.player.external_player import ExternalPlayer
+from schieber.players.external_player import ExternalPlayer
 
 logger = logging.getLogger(__name__)
 
 
 class ModelPlayer(GreedyPlayer):
     """
-    This player can be used to evaluate the strength of a trained RL model.
+    This players can be used to evaluate the strength of a trained RL model.
     """
 
     def __init__(self, name='unknown', seed=None, trumps='all',
                  model_path="/Users/joelito/MEGA/Studium/Master/Informatik/Courses/Data Science/Very Deep Learning/Project/schieber/tests/benchmarks/models/stich-higher-learning-rate_env=Schieber-v0_gamma=0.89_nsteps=90_learning_rate=0.001_policy=JassPolicy_model=PPO2_time=2019-01-13_12:08:28_final.pkl"):
         """
-        Inits the player with a trained model. This model is based on the stable_baselines framework.
+        Inits the players with a trained model. This model is based on the stable_baselines framework.
         (It has to implement the predict() function)
         :param model_path:
         """

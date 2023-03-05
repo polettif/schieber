@@ -12,9 +12,9 @@ from schieber.game import Game
 
 from schieber.team import Team
 
-from schieber.player.external_player import ExternalPlayer
+from schieber.players.external_player import ExternalPlayer
 
-from schieber.player.random_player import RandomPlayer
+from schieber.players.random_player import RandomPlayer
 
 
 @pytest.mark.skip()

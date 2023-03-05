@@ -2,7 +2,7 @@ import random
 
 from schieber.card import Card
 from schieber.game import GameState
-from schieber.player.base_player import BasePlayer
+from schieber.players.base_player import BasePlayer
 from schieber.rules.trumpf_rules import trumpf_allowed
 from schieber.rules.trumpf import Trumpf
 

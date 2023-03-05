@@ -4,8 +4,8 @@ from schieber.card import Card
 from schieber.game import Game
 from schieber.rules.suit import Suit
 from schieber.rules.trumpf import Trumpf
-from schieber.player.challenge_player.strategy.jass_strategy import JassStrategy
-from schieber.player.challenge_player.challenge_player import ChallengePlayer
+from schieber.players.challenge_player.strategy.jass_strategy import JassStrategy
+from schieber.players.challenge_player.challenge_player import ChallengePlayer
 
 
 @pytest.fixture

@@ -1,5 +1,5 @@
 import pytest
-from schieber.player.random_player import RandomPlayer
+from schieber.players.random_player import RandomPlayer
 from schieber.tournament import Tournament
 
 

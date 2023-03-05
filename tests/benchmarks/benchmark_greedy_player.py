@@ -1,7 +1,7 @@
 import pytest
 
-from schieber.player.greedy_player.greedy_player import GreedyPlayer
-from schieber.player.random_player import RandomPlayer
+from schieber.players.greedy_player.greedy_player import GreedyPlayer
+from schieber.players.random_player import RandomPlayer
 from tests.benchmarks.statistical_helper import run_statistics
 
 

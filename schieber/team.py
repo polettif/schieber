@@ -5,7 +5,7 @@ class Team:
 
     def player_by_number(self, number):
         """
-        Returns the player by the number in the team. The number should be either 0 or 1.
+        Returns the players by the number in the team. The number should be either 0 or 1.
         :param number:
         :return:
         """
