@@ -1,5 +1,5 @@
 from schieber.game import GameState
-from schieber.player.challenge_player.strategy.mode.mode import Mode
+from schieber.players.challenge_player.strategy.mode.mode import Mode
 from schieber.helpers.game_helper import *
 from schieber.card import from_string_to_card
 

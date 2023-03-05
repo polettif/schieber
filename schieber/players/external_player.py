@@ -1,20 +1,20 @@
 import logging
 from multiprocessing import Condition
 
-from schieber.player.greedy_player.greedy_player import GreedyPlayer
+from schieber.players.greedy_player.greedy_player import GreedyPlayer
 
 logger = logging.getLogger(__name__)
 
 
 class ExternalPlayer(GreedyPlayer):
     """
-    The RL player in the gym environment wants to initiate control by
+    The RL players in the gym environment wants to initiate control by
         invoking the step() function. This step function sends an action, lets the environment simulate and then
         receives an observation back from the environment.
-    In this schieber environment the control is initiated by the Game and not by the player. This is why we need this
-        architecture with this external player. The external player blocks when its choose_card() method is called and
-        sends the current state received by the Game as an observation to the rl player from gym who connects via a
-        websocket. Then the rl agent selects an action and sends it back to this external player. The external player
+    In this schieber environment the control is initiated by the Game and not by the players. This is why we need this
+        architecture with this external players. The external players blocks when its choose_card() method is called and
+        sends the current state received by the Game as an observation to the rl players from gym who connects via a
+        websocket. Then the rl agent selects an action and sends it back to this external players. The external players
         submits this action as the chosen card to the Game. The Game simulates the game and this process starts over.
         With the help of this architecture we can use the benefits of the standardized gym environments with many
         rl methods which are already implemented (openai baselines: https://github.com/openai/baselines).
@@ -66,7 +66,7 @@ class ExternalPlayer(GreedyPlayer):
 
     def set_chosen_card(self, allowed_cards, chosen_card):
         """
-        Sets the chosen card based on the action of the RL player.
+        Sets the chosen card based on the action of the RL players.
         :param allowed_cards:
         :param chosen_card:
         :return:
@@ -97,7 +97,7 @@ class ExternalPlayer(GreedyPlayer):
 
     def set_action(self, action):
         """
-        Sets the action chosen by the RL player
+        Sets the action chosen by the RL players
         :param action:
         :return:
         """
@@ -111,14 +111,14 @@ class ExternalPlayer(GreedyPlayer):
 
     def before_first_stich(self):
         """
-        Checks if the player has already played any cards in this game
+        Checks if the players has already played any cards in this game
         :return:
         """
         return len(self.cards) == 9
 
     def at_last_stich(self):
         """
-        Checks if the player is at the last stich where there is no choice anymore
+        Checks if the players is at the last stich where there is no choice anymore
         :return:
         """
         return len(self.cards) == 1

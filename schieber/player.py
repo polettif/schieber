@@ -2,11 +2,11 @@ import inspect
 
 from schieber.card import from_string_to_card, Card
 from schieber.game import GameState
-from schieber.trumpf import Trumpf
+from schieber.rules.trumpf import Trumpf
 from schieber.rules.stich_rules import allowed_cards
 
 
-class BasePlayer:
+class Player:
     def __init__(self, name='unknown', seed=None):
         """
         :param name:
@@ -42,12 +42,13 @@ class BasePlayer:
     def stich_over(self, state=None):
         pass
 
+    # TODO move to stich or stich_rules
     def allowed_cards(self, state: GameState):
         return self.allowed_cards_with_hand_cards(state, self.cards)
 
     def allowed_cards_with_hand_cards(self, state: GameState, hand_cards):
         """
-        Returns the cards on the hand of the player which he/she is allowed to play in the current state according to the rules
+        Returns the cards on the hand of the players which he/she is allowed to play in the current state according to the rules
         :param hand_cards:
         :param state:
         :return:

@@ -1,7 +1,7 @@
-from schieber.suit import Suit
+from schieber.rules.suit import Suit
 
 from schieber.card import Card
-from schieber.deck import Deck
+from schieber.rules.deck import Deck
 
 from schieber.helpers.game_helper import split_card_values_by_suit, split_cards_by_suit
 

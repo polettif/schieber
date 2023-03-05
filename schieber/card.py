@@ -3,7 +3,7 @@ import re
 
 import numpy as np
 
-from schieber.suit import Suit
+from schieber.rules.suit import Suit
 
 
 class Card:

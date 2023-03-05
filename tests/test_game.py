@@ -1,10 +1,10 @@
 import pytest
 
-from schieber.deck import Deck
+from schieber.rules.deck import Deck
 
-from schieber.trumpf import Trumpf
+from schieber.rules.trumpf import Trumpf
 
-from schieber.player.random_player import RandomPlayer
+from schieber.players.random_player import RandomPlayer
 
 from schieber.game import Game, get_player_index
 from schieber.team import Team

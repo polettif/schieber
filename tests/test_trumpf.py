@@ -1,4 +1,4 @@
-from schieber.trumpf import Trumpf
+from schieber.rules.trumpf import Trumpf
 
 
 def test_trumpf_count():

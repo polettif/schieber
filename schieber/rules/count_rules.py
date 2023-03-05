@@ -1,4 +1,4 @@
-from schieber.trumpf import Trumpf
+from schieber.rules.trumpf import Trumpf
 
 points_obe_abe = {6: 0, 7: 0, 8: 8, 9: 0, 10: 10, 11: 2, 12: 3, 13: 4, 14: 11}
 points_unde_ufe = {6: 11, 7: 0, 8: 8, 9: 0, 10: 10, 11: 2, 12: 3, 13: 4, 14: 0}

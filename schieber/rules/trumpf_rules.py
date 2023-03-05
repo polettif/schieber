@@ -1,4 +1,4 @@
-from schieber.trumpf import Trumpf
+from schieber.rules.trumpf import Trumpf
 
 
 def trumpf_allowed(chosen_trumpf, geschoben):

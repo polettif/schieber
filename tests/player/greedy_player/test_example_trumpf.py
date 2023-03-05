@@ -1,10 +1,9 @@
 import pytest
 
 from schieber.card import Card
-from schieber.game import Game
-from schieber.player.greedy_player.trumpf_decision import choose_trumpf, TrumpfType
-from schieber.suit import Suit
-from schieber.trumpf import Trumpf
+from schieber.players.greedy_player.trumpf_decision import decide_trumpf, TrumpfType
+from schieber.rules.suit import Suit
+from schieber.rules.trumpf import Trumpf
 
 
 @pytest.mark.parametrize("cards, trumpf, trumpf_type", [
@@ -28,7 +27,7 @@ from schieber.trumpf import Trumpf
      TrumpfType.STICHE_5),
 ])
 def test_choose_trumpf_no_schieben(cards, trumpf, trumpf_type):
-    evaluate_trumpf, evaluate_trumpf_type = choose_trumpf(cards=cards, geschoben=False)
+    evaluate_trumpf, evaluate_trumpf_type = decide_trumpf(cards=cards, geschoben=False)
     assert (evaluate_trumpf, evaluate_trumpf_type) == (trumpf, trumpf_type)
 
 
@@ -41,5 +40,5 @@ def test_choose_trumpf_no_schieben(cards, trumpf, trumpf_type):
      TrumpfType.HAVE_TO_DECIDE),
 ])
 def test_choose_trumpf_schieben(cards, trumpf, trumpf_type):
-    evaluate_trumpf, evaluate_trumpf_type = choose_trumpf(cards=cards, geschoben=True)
+    evaluate_trumpf, evaluate_trumpf_type = decide_trumpf(cards=cards, geschoben=True)
     assert (evaluate_trumpf, evaluate_trumpf_type) == (trumpf, trumpf_type)

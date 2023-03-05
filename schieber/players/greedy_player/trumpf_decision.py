@@ -2,7 +2,7 @@ from enum import Enum
 from operator import itemgetter
 
 from schieber.helpers.game_helper import *
-from schieber.trumpf import Trumpf
+from schieber.rules.trumpf import Trumpf
 
 
 # https://www.jassverzeichnis.ch/index.php/blog/95-jass-tipps-trumpfansagen-schieber
@@ -16,8 +16,7 @@ class TrumpfType(Enum):
     HAVE_TO_DECIDE = 'HAVE_TO_DECIDE'
 
 
-# TODO Does not fit base_player contract choose_trumpf(state: GameState)
-def choose_trumpf(cards, geschoben):
+def decide_trumpf(cards, geschoben):
     candidates = []
     for trumpf in filter(lambda x: x != Trumpf.OBE_ABE and x != Trumpf.UNDE_UFE and x != Trumpf.SCHIEBEN, Trumpf):
         trumpf_type = evaluate_stich_trumpf(cards, trumpf.name)

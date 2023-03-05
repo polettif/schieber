@@ -1,6 +1,6 @@
-from schieber.player.challenge_player.challenge_player import ChallengePlayer
-from schieber.player.greedy_player.greedy_player import GreedyPlayer
-from schieber.player.random_player import RandomPlayer
+from schieber.players.challenge_player.challenge_player import ChallengePlayer
+from schieber.players.greedy_player.greedy_player import GreedyPlayer
+from schieber.players.random_player import RandomPlayer
 from schieber.tournament import Tournament
 
 

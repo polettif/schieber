@@ -1,9 +1,9 @@
 import pytest
-from schieber.player.challenge_player.challenge_player import ChallengePlayer
+from schieber.players.challenge_player.challenge_player import ChallengePlayer
 
-from schieber.player.greedy_player.greedy_player import GreedyPlayer
-from schieber.player.model_player import ModelPlayer
-from schieber.player.random_player import RandomPlayer
+from schieber.players.greedy_player.greedy_player import GreedyPlayer
+from schieber.players.model_player import ModelPlayer
+from schieber.players.random_player import RandomPlayer
 from tests.benchmarks.statistical_helper import run_statistics
 
 
