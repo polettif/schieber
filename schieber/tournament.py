@@ -50,7 +50,7 @@ class Tournament:
         self.teams = [team_1, team_2]
         return self.teams
 
-    def play(self, rounds=0, use_counting_factor=False):
+    def play(self, rounds=0):
         """
         Plays a tournament until one team reaches the point_limit.
         :param rounds:
@@ -67,7 +67,7 @@ class Tournament:
                 # Increment seed by one so that each game is different.
                 # But still the sequence of games is the same each time
                 self.seed += 1
-            game = Game(teams=self.teams, point_limit=self.point_limit, use_counting_factor=use_counting_factor, seed=self.seed)
+            game = Game(teams=self.teams, point_limit=self.point_limit, seed=self.seed)
             self.games.append(game)
             logger.info('-' * 200)
             logger.info('Round {} starts.'.format(len(self.games)))
