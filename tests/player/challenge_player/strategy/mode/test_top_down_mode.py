@@ -1,7 +1,7 @@
 import pytest
 
 from schieber.card import Card
-from schieber.suit import Suit
+from schieber.rules.suit import Suit
 from schieber.player.challenge_player.strategy.mode.top_down_mode import TopDownMode
 
 

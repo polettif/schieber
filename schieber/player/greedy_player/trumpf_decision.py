@@ -2,7 +2,7 @@ from enum import Enum
 from operator import itemgetter
 
 from schieber.helpers.game_helper import *
-from schieber.trumpf import Trumpf
+from schieber.rules.trumpf import Trumpf
 
 
 # https://www.jassverzeichnis.ch/index.php/blog/95-jass-tipps-trumpfansagen-schieber

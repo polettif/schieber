@@ -1,7 +1,7 @@
 import pytest
 
-from schieber.deck import Deck
-from schieber.trumpf import Trumpf
+from schieber.rules.deck import Deck
+from schieber.rules.trumpf import Trumpf
 from schieber.rules.count_rules import count_stich
 
 

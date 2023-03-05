@@ -1,5 +1,5 @@
 from schieber.card import Card
-from schieber.deck import Deck
+from schieber.rules.deck import Deck
 
 
 def test_deck_count():

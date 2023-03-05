@@ -1,6 +1,6 @@
 import pytest
 
-from schieber.trumpf import Trumpf
+from schieber.rules.trumpf import Trumpf
 from schieber.rules.trumpf_rules import trumpf_allowed
 
 

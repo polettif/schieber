@@ -1,6 +1,6 @@
 import pytest
 
-from schieber.suit import Suit
+from schieber.rules.suit import Suit
 
 from schieber.card import Card, from_string_to_card, from_card_to_tuple, from_tuple_to_card, from_string_to_tuple, \
     from_tuple_to_string, from_index_to_card, from_card_to_index, from_index_to_string, from_string_to_index, \

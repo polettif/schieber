@@ -1,13 +1,10 @@
 import logging
 import sys
-import time
 from threading import Thread
 
 import pytest
-from timeit import default_timer as timer
-from math import sqrt, floor
 
-from schieber.suit import Suit
+from schieber.rules.suit import Suit
 
 from schieber.card import Card
 
@@ -18,7 +15,6 @@ from schieber.team import Team
 from schieber.player.external_player import ExternalPlayer
 
 from schieber.player.random_player import RandomPlayer
-from schieber.tournament import Tournament
 
 
 @pytest.mark.skip()

@@ -1,8 +1,8 @@
 import pytest
 
-from schieber.deck import Deck
+from schieber.rules.deck import Deck
 
-from schieber.trumpf import Trumpf
+from schieber.rules.trumpf import Trumpf
 
 from schieber.player.random_player import RandomPlayer
 

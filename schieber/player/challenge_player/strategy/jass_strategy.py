@@ -1,8 +1,5 @@
-from schieber.player.challenge_player.strategy.mode.trumpf_color_mode import *
-from schieber.player.challenge_player.strategy.mode.top_down_mode import *
-from schieber.player.challenge_player.strategy.mode.bottom_up_mode import *
 from schieber.player.challenge_player.strategy.card_counter import *
-from schieber.trumpf import Trumpf
+from schieber.rules.trumpf import Trumpf
 
 
 class JassStrategy:

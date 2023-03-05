@@ -1,6 +1,6 @@
 from enum import Enum
 
-from schieber.suit import Suit
+from schieber.rules.suit import Suit
 
 
 class Trumpf(Enum):

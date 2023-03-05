@@ -2,7 +2,7 @@ from functools import partial
 
 from schieber.card import Card
 from schieber.stich import Stich
-from schieber.trumpf import Trumpf
+from schieber.rules.trumpf import Trumpf
 
 UNDER = 11
 NAELL = 9

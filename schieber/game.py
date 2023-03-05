@@ -7,7 +7,7 @@ from schieber.rules.trumpf_rules import trumpf_allowed
 from schieber.rules.count_rules import count_stich
 from schieber.stich import PlayedCard, stich_dict, played_card_dict
 from schieber.team import Team
-from schieber.trumpf import Trumpf
+from schieber.rules.trumpf import Trumpf
 
 logger = logging.getLogger(__name__)
 

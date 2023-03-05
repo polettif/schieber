@@ -1,6 +1,6 @@
 from schieber.player.base_player import BasePlayer
 from schieber.player.greedy_player import trumpf_decision
-from schieber.trumpf import Trumpf
+from schieber.rules.trumpf import Trumpf
 
 
 class GreedyPlayer(BasePlayer):
