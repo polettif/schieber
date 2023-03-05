@@ -1,3 +1,4 @@
+from schieber.game import GameState
 from schieber.helpers.game_helper import *
 from schieber.card import from_string_to_card
 from schieber.trumpf import get_trumpf
@@ -21,10 +22,10 @@ class Mode:
         remaining_sorted = sorted(remaining, key=lambda card: card.get_score(trumpf))
         return remaining_sorted[0]
 
-    def cards_beating_current_stich(self, available_cards, card_counter, state):
-        curr_pos = len(state['table'])
+    def cards_beating_current_stich(self, available_cards, card_counter, state: GameState):
+        curr_pos = len(state.table)
         if curr_pos != 0:
-            for card_played in state['table']:
+            for card_played in state.table:
                 if card_played['player_id'] == card_counter.round_leader(state):
                     current_stich_winner = from_string_to_card(card_played['card'])
                     break
@@ -36,12 +37,12 @@ class Mode:
         else:
             beating_cards = available_cards
 
-        return sorted(beating_cards, key=lambda card: card.get_score(get_trumpf(state['trumpf'])))
+        return sorted(beating_cards, key=lambda card: card.get_score(get_trumpf(state.trumpf)))
 
-    def bock_distance(self, card, card_counter, state):
+    def bock_distance(self, card, card_counter, state: GameState):
         stronger = card_counter.filter_not_dead_cards_of_same_suit(card, lambda x: x.value > card.value)
         stronger = [x for x in stronger if x not in card_counter.get_hand()]
-        table_cards = [from_string_to_card(x['card']) for x in state['table']]
+        table_cards = [from_string_to_card(x['card']) for x in state.table]
         stronger = [x for x in stronger if x not in table_cards]
         return len(stronger)
 

@@ -41,10 +41,10 @@ class CardCounter:
 
     def update_flags(self, player_id, card, state):
         current_stich_color = None
-        if len(state['table']) > 0:
-            current_stich_color = from_string_to_card(state['table'][0]['card']).suit
+        if len(state.table) > 0:
+            current_stich_color = from_string_to_card(state.tableS[0]['card']).suit
 
-        mode = get_mode(state['trumpf'])
+        mode = get_mode(state.trumpf)
 
         if len(self.current_stich) == 4:
             if player_id == self.partner_id and self.round_leader(state) != self.my_id and self.round_leader(state) != self.partner_id:
@@ -59,13 +59,13 @@ class CardCounter:
                         self.flags[player_id].append(DoesntHaveCardFlag(mode.get_current_bock(suit, self)))
 
             if not self.had_stich_previously(player_id):
-                if not (self.current_round() == 0 and state['geschoben'] and (mode.trumpf_name().name in [x.name for x in Suit])):
+                if not (self.current_round() == 0 and state.geschoben and (mode.trumpf_name().name in [x.name for x in Suit])):
                     self.flags[player_id].append(PreviouslyHadStichFlag())
 
             if self.round_leader(state) == self.partner_id:
                 if mode.trumpf_name().name in [x.name for x in Suit]:
                     if self.current_round() == 0:
-                        if state['geschoben']:
+                        if state.geschoben:
                             if card.suit == mode.trumpf_name().name:
                                 for stronger_card in mode.stronger_cards_remaining(card, self):
                                     if stronger_card.value != 11:
@@ -87,7 +87,7 @@ class CardCounter:
     def round_leader(self, state):
         if len(self.get_table_cards()) == 0:
             return None
-        return stich_rules[get_trumpf(state['trumpf'])](played_cards=self.get_table_cards()).player
+        return stich_rules[get_trumpf(state.trumpf)](played_cards=self.get_table_cards()).player
 
     def get_hand(self):
         return self.me.cards
@@ -155,7 +155,7 @@ class CardCounter:
         if card in self.get_hand() or card in [x[0] for x in self.played_cards if len(x) != 0]:
             return 0
 
-        if state['trumpf'] == card.suit and card.value == 11:
+        if state.trumpf == card.suit and card.value == 11:
             return 1/3
 
         for flag in self.flags[player_id]:

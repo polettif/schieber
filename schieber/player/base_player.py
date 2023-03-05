@@ -1,6 +1,7 @@
 import inspect
 
 from schieber.card import from_string_to_card
+from schieber.game import GameState
 from schieber.trumpf import Trumpf
 from schieber.rules.stich_rules import allowed_cards
 
@@ -44,18 +45,18 @@ class BasePlayer:
     def stich_over(self, state=None):
         pass
 
-    def allowed_cards(self, state):
+    def allowed_cards(self, state: GameState):
         return self.allowed_cards_with_hand_cards(state, self.cards)
 
-    def allowed_cards_with_hand_cards(self, state, hand_cards):
+    def allowed_cards_with_hand_cards(self, state: GameState, hand_cards):
         """
         Returns the cards on the hand of the player which he/she is allowed to play in the current state according to the rules
         :param hand_cards:
         :param state:
         :return:
         """
-        table_cards = [from_string_to_card(entry['card']) for entry in state['table']]
-        trumpf = Trumpf[state['trumpf']]
+        table_cards = [from_string_to_card(entry['card']) for entry in state.table]
+        trumpf = Trumpf[state.trumpf]
         return allowed_cards(hand_cards=hand_cards, table_cards=table_cards, trumpf=trumpf)
 
     def __str__(self):

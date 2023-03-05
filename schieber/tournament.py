@@ -88,7 +88,7 @@ class Tournament:
         :return:
         """
         return {
-            'games': [game.get_status() for game in self.games],
+            'games': [game.get_state() for game in self.games],
             'players': [player.get_dict() for player in self.players]
         }
 

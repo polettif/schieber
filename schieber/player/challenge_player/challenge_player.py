@@ -1,5 +1,6 @@
 import random
 
+from schieber.game import GameState
 from schieber.player.base_player import BasePlayer
 from schieber.player.challenge_player.strategy.jass_strategy import JassStrategy
 from schieber.card import Card
@@ -23,16 +24,16 @@ class ChallengePlayer(BasePlayer):
             if allowed:
                 yield None
 
-    def choose_card(self, state=None):
-        if len(state['stiche']) == 0:
-            if len(state['table']) == 0:
-                if state['geschoben']:
+    def choose_card(self, state:GameState=None):
+        if len(state.stiche) == 0:
+            if len(state.table) == 0:
+                if state.geschoben:
                     self.role = 'Partner'
                 else:
                     self.role = 'Trumpf'
 
-            elif len(state['table']) == 2:
-                if state['geschoben']:
+            elif len(state.table) == 2:
+                if state.geschoben:
                     self.role = 'Trumpf'
                 else:
                     self.role = 'Partner'
