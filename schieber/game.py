@@ -102,7 +102,7 @@ class Game:
         self.dealer.shuffle_cards(self.seed)
         self.dealer.deal_cards()
         self.define_trumpf(start_player_index=start_player_index)
-        logger.info('Chosen Trumpf: {0} \n'.format(self.trumpf.name))
+        logger.info('Chosen Trumpf: {0} \n'.format(self.trumpf))
 
         for i in range(9):
             stich = self.play_stich(start_player_index)

@@ -1,18 +1,27 @@
+from schieber.game import GameState
 from schieber.player.base_player import BasePlayer
+from schieber.rules.trumpf_rules import trumpf_allowed
 
 
 class CliPlayer(BasePlayer):
-    def choose_trumpf(self, geschoben=False):
+    def choose_trumpf(self, state: GameState) -> 'Trumpf':
         self._print_cards()
         print('\nTrumpf:')
         for i, trumpf in enumerate(self.trumpf_list):
             print('{0} : {1}'.format(i, trumpf))
-        print('\nGeschoben: {0}\n'.format(geschoben))
-        return move_allowed(move_function=self._choose_trumpf_input, message="Schieben not allowed!\n")
+        print('\nGeschoben: {0}\n'.format(state.geschoben))
+        while True:
+            chosen_trumpf = self._choose_trumpf_input()
+            if trumpf_allowed(chosen_trumpf, state.geschoben):
+                return chosen_trumpf
 
-    def choose_card(self, state=None):
+    def choose_card(self, state: GameState) -> 'Card':
         self._print_cards()
-        return move_allowed(move_function=self._choose_card_input, message="Card not allowed!\n")
+        allowed_cards = self.allowed_cards(state=state)
+        while True:
+            chosen_card = self._choose_card_input()
+            if chosen_card in allowed_cards:
+                return chosen_card
 
     def _choose_trumpf_input(self):
         while True:
