@@ -43,6 +43,7 @@ class Game:
         self.stop_playing = False  # has to be set to true in order to stop the endless play
 
     def play_endless(self, start_player_index=0, whole_rounds=True):
+        # TODO move to tournament.play() with endless param
         """
         Plays one game after the other with no end. This can be used for training a RL Player. Like this we can reuse
         one game. When we are training with tournaments, each time we play a game, it is added to the list of games.
@@ -96,10 +97,14 @@ class Game:
         :param whole_rounds:
         :return:
         """
+        logging.basicConfig(level=logging.DEBUG)
+
+        # TODO move seed increment to tournament class
         if self.seed is not None:
             # Increment seed by one so that each game is different.
             # But still the sequence of games is the same each time
             self.seed += 1
+
         self.dealer.shuffle_cards(self.seed)
         self.dealer.deal_cards()
         self.define_trumpf(start_player_index=start_player_index)
@@ -110,13 +115,16 @@ class Game:
             self.count_points(stich, last=(i == 8))
 
             logger.info('\nStich: {0} \n'.format(stich.player))
-            logger.info('{}{}\n'.format('-' * 180, self.trumpf))
+            logger.info('{}{}\n'.format('-' * 35, self.trumpf))
             start_player_index = self.players.index(stich.player)
             self.stiche.append(stich)
             self.stich_over_information()
 
             if (self.teams[0].won(self.point_limit) or self.teams[1].won(self.point_limit)) and not whole_rounds:
                 return True
+        logger.info(self.teams[0].points)
+        logger.info(self.teams[1].points)
+
         return False
 
     def define_trumpf(self, start_player_index):
