@@ -20,7 +20,7 @@ class Team:
         :param point_limit:
         :return: true if the points of the team are larger than the point limit and false otherwise
         """
-        return self.points >= point_limit
+        return point_limit is not None and self.points >= point_limit
 
     def reset_points(self):
         """

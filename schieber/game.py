@@ -19,7 +19,8 @@ class EmptyPlayer:  # circular reference via GameState if inheriting Player
 
 
 class Game:
-    def __init__(self, teams=None, point_limit=1500,
+    def __init__(self, teams=None,
+                 point_limit=None,
                  counting_factors=None,
                  seed=None):
         if teams is None:
