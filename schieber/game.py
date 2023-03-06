@@ -43,6 +43,166 @@ class Game:
         self.endless_play_control = Condition()  # used to control the termination of the play_endless method
         self.stop_playing = False  # has to be set to true in order to stop the endless play
 
+    def play(self, start_player_index=0, whole_rounds=False):
+        """
+        Plays a game from the start to the end in the following manner:
+        1. The dealer shuffles the cards and deals 9 cards to each player
+        2. The player on the right side of the dealer chooses the trumpf. If he/she chooses 'geschoben' his/her partner
+            can choose the trumpf.
+        3. For 9 rounds/stichs let the players play their cards.
+        4. After each stich count the points, update the starting player based on who won the stich and add the cards
+            played in the stich to the already played stichs.
+        5. Check if a team has reached the point limit
+        :param start_player_index:
+        :param whole_rounds:
+        :return:
+        """
+        logging.basicConfig(level=logging.DEBUG)
+
+        # TODO move seed increment to tournament class
+        if self.seed is not None:
+            # Increment seed by one so that each game is different.
+            # But still the sequence of games is the same each time
+            self.seed += 1
+
+        # 1: deal cards
+        self.dealer.shuffle_cards(self.seed)
+        self.dealer.deal_cards()
+
+        # 2: choose trumpf
+        self.define_trumpf(start_player_index=start_player_index)
+
+        logger.info('Chosen Trumpf: {0} \n'.format(self.trumpf))
+
+        # 3: play 9 stichs
+        for i in range(9):
+            stich = self.play_stich(start_player_index)
+
+            # 4a: count points after playing a stich
+            self.count_points(stich, last=(i == 8))
+
+            logger.info('\nStich: {0} \n'.format(stich.player))
+            logger.info('{}{}\n'.format('-' * 35, self.trumpf))
+
+            # 4b: choose next starting player
+            start_player_index = self.players.index(stich.player)
+
+            # 4c: save stich and tell players that the stich is over
+            self.stiche.append(stich)
+            self.stich_over_info()
+
+            # 5: check if team has reached the game point_limit
+            if (self.teams[0].won(self.point_limit) or self.teams[1].won(self.point_limit)) and not whole_rounds:
+                return True
+        logger.info(self.teams[0].points)
+        logger.info(self.teams[1].points)
+
+        return False
+
+    def define_trumpf(self, start_player_index):
+        """
+        Sets the trumpf based on the choice of the player assigned to choose the trumpf
+        :param start_player_index: The player which is on the right side of the dealer
+        :return:
+        """
+        chosen_trumpf = self.players[start_player_index].choose_trumpf(self.get_state())
+        if chosen_trumpf == Trumpf.SCHIEBEN:
+            self.geschoben = True
+            chosen_trumpf = self.players[(start_player_index + 2) % 4].choose_trumpf(self.get_state())
+            is_allowed_trumpf = trumpf_allowed(chosen_trumpf=chosen_trumpf, geschoben=self.geschoben)
+            if not is_allowed_trumpf:
+                raise Exception('Trumpf not allowed')
+        self.trumpf = chosen_trumpf
+
+    def play_stich(self, start_player_index):
+        """
+        Plays one entire stich
+        :param start_player_index: the index of the player who won the last stich or was assigned to choose the trumpf
+        :return: the stich containing the played cards and the winner
+        """
+        self.cards_on_table = []
+        first_card = self.play_card(table_cards=self.cards_on_table, player=self.players[start_player_index])
+        self.move_made_info(self.players[start_player_index].id, first_card)
+        self.cards_on_table = [PlayedCard(player=self.players[start_player_index], card=first_card)]
+        for i in get_player_index(start_index=start_player_index):
+            current_player = self.players[i]
+            card = self.play_card(table_cards=self.cards_on_table, player=current_player)
+            self.move_made_info(current_player.id, card)
+            self.cards_on_table.append(PlayedCard(player=current_player, card=card))
+        stich = stich_rules[self.trumpf](played_cards=self.cards_on_table)
+        return stich
+
+    def play_card(self, table_cards, player):
+        """
+        Checks if the card played by the player is allowed. If yes removes the card from the player's hand.
+        :param table_cards:
+        :param player:
+        :return: the card chosen by the player
+        """
+        # TODO table_cards param is not necessary if they're provided in GameState anyways
+        cards = [played_card.card for played_card in table_cards]
+        chosen_card = player.choose_card(state=self.get_state())
+        if not card_allowed(table_cards=cards, chosen_card=chosen_card, hand_cards=player.cards, trumpf=self.trumpf):
+            Exception("Card not allowed")
+        logger.info('Table: {0}:{1}'.format(player, chosen_card))
+        player.cards.remove(chosen_card)
+        return chosen_card
+
+    def move_made_info(self, player_id, card):
+        """
+        Tells players about the move that's just been made
+        """
+        for player in self.players:
+            player.move_made(player_id, card, self.get_state())
+
+    def stich_over_info(self):
+        for player in self.players:
+            player.stich_over(state=self.get_state())
+
+    def count_points(self, stich, last):
+        """
+        Gets the team of the winner of the stich and counts the points.
+        :param stich:
+        :param last: True if it is the last stich of the Game, False otherwise
+        :return:
+        """
+        stich_player_index = self.players.index(stich.player)
+        cards = [played_card.card for played_card in stich.played_cards]
+        self.add_points(team_index=(stich_player_index % 2), cards=cards, last=last)
+
+    def add_points(self, team_index, cards, last):
+        """
+        Adds the points of the cards to the score of the team who won the stich.
+        :param team_index:
+        :param cards:
+        :param last:
+        :return:
+        """
+        points = count_stich(cards, self.trumpf, last=last)
+        points = points * self.counting_factors[self.trumpf]
+        self.teams[team_index].points += points
+
+    def get_state(self) -> 'GameState':
+        return GameState(
+            stiche=[stich_dict(stich) for stich in self.stiche],
+            trumpf=self.trumpf,
+            geschoben=self.geschoben,
+            point_limit=self.point_limit,
+            table=[played_card_dict(played_card) for played_card in self.cards_on_table],
+            teams=[dict(points=team.points) for team in self.teams],
+            counting_factors=self.counting_factors
+        )
+
+    def reset_points(self):
+        # TODO a Game should not be resettable
+        """
+        Resets the points of the teams to 0. This is used when single games are played.
+        :return:
+        """
+        [team.reset_points() for team in self.teams]
+
+    # TODO refactor endless mode methods
+
     def play_endless(self, start_player_index=0, whole_rounds=True):
         # TODO move to tournament.play() with endless param
         """
@@ -82,147 +242,6 @@ class Game:
         """
         self.reset_points()
         self.stiche = []
-
-    def play(self, start_player_index=0, whole_rounds=False):
-        """
-        Plays a game from the start to the end in the following manner:
-        1. The dealer shuffles the cards
-        2. The dealer deals 9 cards to each player
-        3. The player on the right side of the dealer chooses the trumpf. If he/she chooses 'geschoben' his/her partner
-            can choose the trumpf.
-        4. For 9 rounds/stichs let the players play their cards.
-        5. After each stich count the points, update the starting player based on who won the stich and add the cards
-            played in the stich to the already played stichs.
-        6. Check if a team has reached the point limit
-        :param start_player_index:
-        :param whole_rounds:
-        :return:
-        """
-        logging.basicConfig(level=logging.DEBUG)
-
-        # TODO move seed increment to tournament class
-        if self.seed is not None:
-            # Increment seed by one so that each game is different.
-            # But still the sequence of games is the same each time
-            self.seed += 1
-
-        self.dealer.shuffle_cards(self.seed)
-        self.dealer.deal_cards()
-        self.define_trumpf(start_player_index=start_player_index)
-        logger.info('Chosen Trumpf: {0} \n'.format(self.trumpf))
-
-        for i in range(9):
-            stich = self.play_stich(start_player_index)
-            self.count_points(stich, last=(i == 8))
-
-            logger.info('\nStich: {0} \n'.format(stich.player))
-            logger.info('{}{}\n'.format('-' * 35, self.trumpf))
-            start_player_index = self.players.index(stich.player)
-            self.stiche.append(stich)
-            self.stich_over_information()
-
-            if (self.teams[0].won(self.point_limit) or self.teams[1].won(self.point_limit)) and not whole_rounds:
-                return True
-        logger.info(self.teams[0].points)
-        logger.info(self.teams[1].points)
-
-        return False
-
-    def define_trumpf(self, start_player_index):
-        """
-        Sets the trumpf based on the choice of the player assigned to choose the trumpf
-        :param start_player_index: The player which is on the right side of the dealer
-        :return:
-        """
-        chosen_trumpf = self.players[start_player_index].choose_trumpf(self.get_state())
-        if chosen_trumpf == Trumpf.SCHIEBEN:
-            self.geschoben = True
-            chosen_trumpf = self.players[(start_player_index + 2) % 4].choose_trumpf(self.get_state())
-            is_allowed_trumpf = trumpf_allowed(chosen_trumpf=chosen_trumpf, geschoben=self.geschoben)
-            if not is_allowed_trumpf:
-                raise Exception('Trumpf not allowed')
-        self.trumpf = chosen_trumpf
-
-    def play_stich(self, start_player_index):
-        """
-        Plays one entire stich
-        :param start_player_index: the index of the player who won the last stich or was assigned to choose the trumpf
-        :return: the stich containing the played cards and the winner
-        """
-        self.cards_on_table = []
-        first_card = self.play_card(table_cards=self.cards_on_table, player=self.players[start_player_index])
-        self.move_made(self.players[start_player_index].id, first_card)
-        self.cards_on_table = [PlayedCard(player=self.players[start_player_index], card=first_card)]
-        for i in get_player_index(start_index=start_player_index):
-            current_player = self.players[i]
-            card = self.play_card(table_cards=self.cards_on_table, player=current_player)
-            self.move_made(current_player.id, card)
-            self.cards_on_table.append(PlayedCard(player=current_player, card=card))
-        stich = stich_rules[self.trumpf](played_cards=self.cards_on_table)
-        return stich
-
-    def play_card(self, table_cards, player):
-        """
-        Checks if the card played by the player is allowed. If yes removes the card from the player's hand.
-        :param table_cards:
-        :param player:
-        :return: the card chosen by the player
-        """
-        cards = [played_card.card for played_card in table_cards]
-        chosen_card = player.choose_card(state=self.get_state())
-        if not card_allowed(table_cards=cards, chosen_card=chosen_card, hand_cards=player.cards, trumpf=self.trumpf):
-            Exception("Card not allowed")
-        logger.info('Table: {0}:{1}'.format(player, chosen_card))
-        player.cards.remove(chosen_card)
-        return chosen_card
-
-    def move_made(self, player_id, card):
-        for player in self.players:
-            player.move_made(player_id, card, self.get_state())
-
-    def stich_over_information(self):
-        [player.stich_over(state=self.get_state()) for player in self.players]
-
-    def count_points(self, stich, last):
-        """
-        Gets the team of the winner of the stich and counts the points.
-        :param stich:
-        :param last: True if it is the last stich of the Game, False otherwise
-        :return:
-        """
-        stich_player_index = self.players.index(stich.player)
-        cards = [played_card.card for played_card in stich.played_cards]
-        self.add_points(team_index=(stich_player_index % 2), cards=cards, last=last)
-
-    def add_points(self, team_index, cards, last):
-        """
-        Adds the points of the cards to the score of the team who won the stich.
-        :param team_index:
-        :param cards:
-        :param last:
-        :return:
-        """
-        points = count_stich(cards, self.trumpf, last=last)
-        points = points * self.counting_factors[self.trumpf]
-        self.teams[team_index].points += points
-
-    def get_state(self) -> 'GameState':
-        return GameState(
-            stiche=[stich_dict(stich) for stich in self.stiche],
-            trumpf=self.trumpf,
-            geschoben=self.geschoben,
-            point_limit=self.point_limit,
-            table=[played_card_dict(played_card) for played_card in self.cards_on_table],
-            teams=[dict(points=team.points) for team in self.teams],
-            counting_factors=self.counting_factors
-        )
-
-    def reset_points(self):
-        """
-        Resets the points of the teams to 0. This is used when single games are played.
-        :return:
-        """
-        [team.reset_points() for team in self.teams]
 
 
 class GameState:
