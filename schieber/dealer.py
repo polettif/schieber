@@ -11,7 +11,7 @@ class Dealer:
     def shuffle_cards(self, seed=None):
         """
         Shuffles the cards to a random ordering.
-        :param seed
+        :param seed:
         :return:
         """
         random.seed(seed)
