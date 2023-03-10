@@ -1,6 +1,6 @@
 from math import floor
 
-from schieber.rules.deck import Deck
+from jass.deck import Deck
 from schieber.players.challenge_player.strategy.flags.doesnt_habe_card_flag import DoesntHaveCardFlag
 from schieber.players.challenge_player.strategy.flags.falied_to_serve_suit_flag import FailedToServeSuitFlag
 from schieber.players.challenge_player.strategy.flags.previously_had_stich_flag import PreviouslyHadStichFlag
@@ -10,7 +10,7 @@ from schieber.players.challenge_player.strategy.mode.top_down_mode import *
 from schieber.players.challenge_player.strategy.mode.trumpf_color_mode import *
 from schieber.rules.stich_rules import stich_rules
 from schieber.stich import PlayedCard
-from schieber.rules.suit import Suit
+from jass.suit import Suit
 
 
 class CardCounter:

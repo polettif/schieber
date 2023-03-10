@@ -3,7 +3,7 @@ import random
 from schieber.game import GameState
 from schieber.player import Player
 from schieber.players.challenge_player.strategy.jass_strategy import JassStrategy
-from schieber.card import Card
+from jass.card import Card
 from schieber.rules.trumpf import Trumpf
 from schieber.rules.trumpf_rules import trumpf_allowed
 

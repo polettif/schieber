@@ -4,9 +4,9 @@ from threading import Thread
 
 import pytest
 
-from schieber.rules.suit import Suit
+from jass.suit import Suit
 
-from schieber.card import Card
+from jass.card import Card
 
 from schieber.game import Game
 

@@ -1,6 +1,6 @@
 import pytest
 
-from schieber.rules.deck import Deck
+from jass.deck import Deck
 
 from schieber.rules.trumpf import Trumpf
 

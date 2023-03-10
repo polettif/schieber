@@ -1,5 +1,5 @@
-from schieber.rules.suit import Suit
-from schieber.card import Card
+from jass.suit import Suit
+from jass.card import Card
 
 
 class Deck:

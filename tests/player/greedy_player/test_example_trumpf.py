@@ -1,8 +1,8 @@
 import pytest
 
-from schieber.card import Card
+from jass.card import Card
 from schieber.players.greedy_player.trumpf_decision import decide_trumpf, TrumpfType
-from schieber.rules.suit import Suit
+from jass.suit import Suit
 from schieber.rules.trumpf import Trumpf
 
 

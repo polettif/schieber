@@ -1,6 +1,6 @@
 import random
 
-from schieber.card import Card
+from jass.card import Card
 from schieber.game import GameState
 from schieber.player import Player
 from schieber.players.greedy_player import trumpf_decision

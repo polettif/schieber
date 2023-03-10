@@ -1,6 +1,6 @@
 from functools import partial
 
-from schieber.card import Card
+from jass.card import Card
 from schieber.stich import Stich
 from schieber.rules.trumpf import Trumpf
 

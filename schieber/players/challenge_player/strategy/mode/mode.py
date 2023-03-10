@@ -1,4 +1,4 @@
-from schieber.card import from_string_to_card
+from jass.card import from_string_to_card
 from schieber.game import GameState
 from schieber.helpers.game_helper import *
 

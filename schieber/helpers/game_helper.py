@@ -1,4 +1,4 @@
-from schieber.rules.suit import Suit
+from jass.suit import Suit
 
 
 def split_card_values_by_suit(cards):

@@ -1,6 +1,6 @@
 import inspect
 
-from schieber.card import from_string_to_card, Card
+from jass.card import from_string_to_card, Card
 from schieber.game import GameState
 from schieber.rules.trumpf import Trumpf
 from schieber.rules.stich_rules import allowed_cards

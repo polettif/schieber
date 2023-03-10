@@ -1,6 +1,6 @@
 import random
 
-from schieber.rules.deck import Deck
+from jass.deck import Deck
 
 
 class Dealer:

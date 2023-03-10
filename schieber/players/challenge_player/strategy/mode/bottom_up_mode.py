@@ -2,7 +2,7 @@ from schieber.game import GameState
 from schieber.players.challenge_player.strategy.mode.uncolored_trumpf import UncoloredTrumpf
 from schieber.helpers.game_helper import *
 from schieber.rules.trumpf import Trumpf
-from schieber.card import from_string_to_card
+from jass.card import from_string_to_card
 
 
 class BottomUpMode(UncoloredTrumpf):

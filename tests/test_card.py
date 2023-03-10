@@ -1,8 +1,8 @@
 import pytest
 
-from schieber.rules.suit import Suit
+from jass.suit import Suit
 
-from schieber.card import Card, from_string_to_card, from_card_to_tuple, from_tuple_to_card, from_string_to_tuple, \
+from jass.card import Card, from_string_to_card, from_card_to_tuple, from_tuple_to_card, from_string_to_tuple, \
     from_tuple_to_string, from_index_to_card, from_card_to_index, from_index_to_string, from_string_to_index, \
     from_card_to_onehot, from_onehot_to_card, from_onehot_to_string, from_string_to_onehot
 

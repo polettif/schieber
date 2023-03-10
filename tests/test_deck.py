@@ -1,5 +1,5 @@
-from schieber.card import Card
-from schieber.rules.deck import Deck
+from jass.card import Card
+from jass.deck import Deck
 
 
 def test_deck_count():
