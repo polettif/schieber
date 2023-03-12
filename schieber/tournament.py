@@ -1,19 +1,22 @@
 import logging
+from typing import Sequence
 
 from schieber.game import Game
+from schieber.player import Player
 from schieber.team import Team
 
 logger = logging.getLogger(__name__)
 
 
 class Tournament:
-    def __init__(self, point_limit=1500, seed=None):
+    def __init__(self, players: list[Player], point_limit=1500, seed=None):
         """
         Sets the point limit and initializes the players, teams and games arrays.
         :param point_limit:
         """
+        assert len(players) == 4
+        self.players = players
         self.point_limit = point_limit
-        self.players = []
         self.teams = []
         self.games = []
         self.seed = seed
@@ -28,16 +31,13 @@ class Tournament:
             player_numbers.append(index)
         assert {0, 1, 2, 3} == set(player_numbers)
 
-    def register_player(self, player):
+    def register_player(self, player: Player, position: int):
         """
-        Adds another player if there are still less than 4 players
-        :param player:
-        :return:
+        Adds another player at the designated position (0-3)
         """
-        number_of_players = len(self.players)
-        assert number_of_players < 4
-        self.players.append(player)
-        player.id = number_of_players
+        assert 0 <= position <= 4
+        player.id = position
+        self.players[position] = player
 
     def build_teams(self):
         """
@@ -66,6 +66,7 @@ class Tournament:
                 # Increment seed by one so that each game is different.
                 # But still the sequence of games is the same each time
                 self.seed += 1
+                # TODO store point limit in teams, build teams only within tournament
             game = Game(teams=self.teams, point_limit=self.point_limit, seed=self.seed)
             self.games.append(game)
             logger.info('-' * 200)

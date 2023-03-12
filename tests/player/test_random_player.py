@@ -19,8 +19,7 @@ def test_is_random():
     standard_deviation = int(floor(sqrt(variance)))
 
     random_players = [RandomPlayer(name=i) for i in range(4)]
-    tournament = Tournament(point_limit=point_limit, seed=1)
-    [tournament.register_player(player=player) for player in random_players]
+    tournament = Tournament(random_players, point_limit=point_limit, seed=1)
 
     team_1_won = 0
     team_2_won = 0
