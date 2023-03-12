@@ -21,23 +21,19 @@ def test_is_random():
     random_players = [RandomPlayer(name=i) for i in range(4)]
     tournament = Tournament(random_players, point_limit=point_limit, seed=1)
 
-    team_1_won = 0
-    team_2_won = 0
+    team_wins = [0, 0]
 
     start = timer()
 
     for _ in range(number_of_tournaments):
         tournament.play()
-        if tournament.teams[0].won(point_limit=point_limit):
-            team_1_won += 1
-        else:
-            team_2_won += 1
+        team_wins[tournament.get_winning_team().team_index] += 1
 
     end = timer()
     print("\nTo run {0} tournaments it took {1:.2f} seconds.".format(number_of_tournaments, end - start))
 
-    difference = abs(team_1_won - team_2_won)
+    difference = abs(team_wins[0] - team_wins[1])
     print("Difference: ", difference)
-    print("Team 1: ", team_1_won)
-    print("Team 2: ", team_2_won)
+    print("Team 1: ", team_wins[0])
+    print("Team 2: ", team_wins[1])
     assert difference in range(0, 4 * standard_deviation)  # if a harder constraint is required replace 4 by 2 or 1

@@ -1,7 +1,9 @@
 class Team:
-    def __init__(self, players=None):
+    # TODO use list[Player] resolve circular dependency via GameState
+    def __init__(self, players, team_index=None):
         self.points = 0
         self.players = players
+        self.team_index = team_index
 
     def player_by_number(self, number):
         """
@@ -14,17 +16,14 @@ class Team:
                 return player
         return None
 
-    def won(self, point_limit):
-        """
-        Checks if the team already won
-        :param point_limit:
-        :return: true if the points of the team are larger than the point limit and false otherwise
-        """
-        return point_limit is not None and self.points >= point_limit
-
     def reset_points(self):
         """
         Resets the points to 0. This is used when single games and no tournaments are played.
         :return:
         """
         self.points = 0
+
+    def __str__(self):
+        if self.team_index is None:
+            return "?"
+        return str(self.team_index+1)

@@ -43,7 +43,7 @@ class Game:
         self.endless_play_control = Condition()  # used to control the termination of the play_endless method
         self.stop_playing = False  # has to be set to true in order to stop the endless play
 
-    def play(self, start_player_index=0, whole_rounds=False):
+    def play(self, start_player_index=0, whole_rounds=False) -> bool:
         """
         Plays a game from the start to the end in the following manner:
         1. The dealer shuffles the cards and deals 9 cards to each player
@@ -92,12 +92,17 @@ class Game:
             self.stich_over_info()
 
             # 5: check if team has reached the game point_limit
-            if (self.teams[0].won(self.point_limit) or self.teams[1].won(self.point_limit)) and not whole_rounds:
+            if (self.team_has_reached_point_limit(0) or self.team_has_reached_point_limit(1)) and not whole_rounds:
                 return True
         logger.info(self.teams[0].points)
         logger.info(self.teams[1].points)
 
         return False
+
+    def team_has_reached_point_limit(self, team_nr: int):
+        if self.point_limit is None:
+            return False
+        return self.teams[team_nr].points >= self.point_limit
 
     def define_trumpf(self, start_player_index):
         """

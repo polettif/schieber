@@ -1,5 +1,4 @@
 import logging
-from typing import Sequence
 
 from schieber.game import Game
 from schieber.player import Player
@@ -45,9 +44,10 @@ class Tournament:
         :return: the team list
         """
         self.check_players()
-        team_1 = Team(players=[self.players[0], self.players[2]])
-        team_2 = Team(players=[self.players[1], self.players[3]])
+        team_1 = Team(players=[self.players[0], self.players[2]], team_index=0)
+        team_2 = Team(players=[self.players[1], self.players[3]], team_index=1)
         self.teams = [team_1, team_2]
+        assert team_1.team_index != team_2.team_index
         return self.teams
 
     def play(self, rounds=0):
@@ -66,7 +66,6 @@ class Tournament:
                 # Increment seed by one so that each game is different.
                 # But still the sequence of games is the same each time
                 self.seed += 1
-                # TODO store point limit in teams, build teams only within tournament
             game = Game(teams=self.teams, point_limit=self.point_limit, seed=self.seed)
             self.games.append(game)
             logger.info('-' * 200)
@@ -78,9 +77,17 @@ class Tournament:
             round_counter += 1
             if whole_rounds and round_counter == rounds:
                 end = True
-        winning_team = 0 if self.teams[0].won(point_limit=self.point_limit) else 1
+        winning_team = self.get_winning_team()
         logger.info('Team {0} won! \n'.format(winning_team))
         self.reset()
+
+    def get_winning_team(self) -> Team:
+        if self.teams[0].points >= self.point_limit:
+            return self.teams[0]
+        elif self.teams[1].points >= self.point_limit:
+            return self.teams[1]
+        else:
+            Exception()
 
     def get_status(self):
         """
