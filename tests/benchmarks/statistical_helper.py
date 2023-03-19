@@ -4,8 +4,7 @@ from schieber.tournament import Tournament
 
 
 def run_statistics(players, number_of_tournaments=10, point_limit=1000):
-    tournament = Tournament(point_limit=point_limit, seed=42)
-    [tournament.register_player(player=player) for player in players]
+    tournament = Tournament(players, point_limit=point_limit, seed=42)
 
     team_1_won = 0
     team_2_won = 0
@@ -14,6 +13,7 @@ def run_statistics(players, number_of_tournaments=10, point_limit=1000):
 
     for _ in range(number_of_tournaments):
         tournament.play()
+        print("!")
         if tournament.teams[0].won(point_limit=point_limit):
             team_1_won += 1
         else:
@@ -26,4 +26,4 @@ def run_statistics(players, number_of_tournaments=10, point_limit=1000):
     print("Difference: ", difference)
     print("Team 1: ", team_1_won)
     print("Team 2: ", team_2_won)
-    assert team_1_won > team_2_won
+    return team_1_won > team_2_won

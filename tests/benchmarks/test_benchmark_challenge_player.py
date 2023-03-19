@@ -11,7 +11,7 @@ def test_against_random():
     players = [ChallengePlayer(name='ChallengeActor'), RandomPlayer(name='RandomOpponent1'),
                ChallengePlayer(name='ChallengePartner'), RandomPlayer(name='RandomOpponent2')]
 
-    run_statistics(players=players)
+    assert run_statistics(players=players)
 
 
 @pytest.mark.statistical
@@ -19,7 +19,7 @@ def test_with_and_against_random():
     players = [ChallengePlayer(name='ChallengeActor'), RandomPlayer(name='RandomOpponent1'),
                RandomPlayer(name='RandomPartner'), RandomPlayer(name='RandomOpponent2')]
 
-    run_statistics(players=players)
+    assert run_statistics(players=players)
 
 
 @pytest.mark.statistical
