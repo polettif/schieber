@@ -42,6 +42,11 @@ class Game:
         self.seed = seed
         self.endless_play_control = Condition()  # used to control the termination of the play_endless method
         self.stop_playing = False  # has to be set to true in order to stop the endless play
+        self.set_player_ids()
+
+    def set_player_ids(self):
+        for i, player in enumerate(self.players):
+            player.id = i
 
     def play(self, start_player_index=0, whole_rounds=False) -> bool:
         """

@@ -9,6 +9,11 @@ from schieber.rules.trumpf_rules import trumpf_allowed
 
 
 class ChallengePlayer(Player):
+
+    def __init__(self, name='unknown', seed=None):
+        super().__init__(name, seed)
+        self.strategy = None
+
     def take_card(self, card):
         self.cards.append(card)
         if len(self.cards) == 9:

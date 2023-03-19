@@ -15,8 +15,8 @@ class Player:
         self.name = name
         self.cards = []
         self.trumpf_list = list(Trumpf)
-        self.id = name
         self.seed = seed
+        self.id: int = -1
 
     def get_dict(self):
         """

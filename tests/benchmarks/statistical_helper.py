@@ -3,7 +3,7 @@ from timeit import default_timer as timer
 from schieber.tournament import Tournament
 
 
-def run_statistics(players, number_of_tournaments=10, point_limit=1000):
+def run_team1_wins_more_than_team2(players, number_of_tournaments=10, point_limit=1000):
     tournament = Tournament(players, point_limit=point_limit, seed=42)
 
     team_1_won = 0
@@ -13,8 +13,7 @@ def run_statistics(players, number_of_tournaments=10, point_limit=1000):
 
     for _ in range(number_of_tournaments):
         tournament.play()
-        print("!")
-        if tournament.teams[0].won(point_limit=point_limit):
+        if tournament.teams[0].points > tournament.teams[1].points:
             team_1_won += 1
         else:
             team_2_won += 1
@@ -26,4 +25,4 @@ def run_statistics(players, number_of_tournaments=10, point_limit=1000):
     print("Difference: ", difference)
     print("Team 1: ", team_1_won)
     print("Team 2: ", team_2_won)
-    return team_1_won > team_2_won
+    return team_1_won >= team_2_won
