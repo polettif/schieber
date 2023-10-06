@@ -12,7 +12,7 @@ def random_players():
 def test_tournament_rounds(random_players):
     point_limit = 100
     tournament = Tournament(random_players, point_limit=point_limit)
-    tournament.play(rounds=20)
+    tournament.play(round_limit=20)
     points = [tournament.teams[0].points, tournament.teams[1].points]
     assert 3 * point_limit < max(points)
 
@@ -28,7 +28,7 @@ def test_tournament(random_players):
 def test_tournament_register(random_players):
     for _ in range(3):
         tournament = Tournament(random_players)
-        tournament.play(rounds=1)
+        tournament.play(round_limit=1)
         assert tournament.teams[0].players[0].name == 'Tick'
         assert tournament.teams[0].players[1].name == 'Track'
         assert tournament.teams[1].players[0].name == 'Trick'
@@ -41,3 +41,8 @@ def test_tournament_player_id(random_players):
     assert tournament.players[1].name == 'Trick'
     assert tournament.players[2].name == 'Track'
     assert tournament.players[3].name == 'Dagobert'
+
+
+def test_endless_tournament(random_players):
+    tournament = Tournament(random_players)
+    tournament.play_endless()
